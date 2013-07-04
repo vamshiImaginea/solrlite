@@ -1,5 +1,5 @@
 <schema>
-	<field_types>
+	<field_type>
 		<type name="numeric" />
 
 		<type name="geo" />
@@ -28,11 +28,11 @@
 				<filter class="solr.PorterStemFilterFactory" />
 			</analyzer>
 		</fieldType>
-	</field_types>
+	</field_type>
 
 
 	<!-- field definitions here -->
-	<fields>
+	<field_defintion>
 		<field name = "PMN" type="text_en" indexed="true" stored="true"
 			required="true" multiValued="false" />
 		<field name = "PMN_s" type="text_esp" indexed="true" stored="true"
@@ -47,6 +47,6 @@
 			required="true" multiValued="false" />
 		<field name = "PFN_s" type="text_esp" indexed="true" stored="true"
 			required="true" multiValued="false" />
-	</fields>
+	</field_defintion>
 
 </schema>

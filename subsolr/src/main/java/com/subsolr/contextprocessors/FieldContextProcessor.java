@@ -14,8 +14,8 @@ import com.subsolr.contextprocessors.model.FieldDefinition;
  * 
  */
 public class FieldContextProcessor {
-
-	private static Map<Field, FieldDefinition> fields;
+	private static String confFile = "FieldContext.xml";
+	private static Map<String, FieldDefinition> fieldDefinitions;
 
 	public static Map<Field, FieldDefinition> getAllFields() {
 		// code here to return the list of available field definitions
@@ -23,7 +23,8 @@ public class FieldContextProcessor {
 	}
 
 	// will want to do a get by name .. worry about implementation later.
-	public FieldDefinition getFiedDefinition(Field field) {
-		return fields.get(field);
+	public FieldDefinition getFieldDefinition(String fieldName) {
+		return fieldDefinitions.get(fieldName);
+
 	}
 }

@@ -2,9 +2,9 @@ package com.subsolr.fieldprocessors;
 
 import java.util.List;
 
-public class StringFieldProcessor implements FieldProcessor<String> {
+public class StringFieldProcessor implements FieldProcessor {
 
-	public List<String> generateTerms() {
+	public List generateTerms() {
 		// TODO Auto-generated method stub
 		return null;
 	}
