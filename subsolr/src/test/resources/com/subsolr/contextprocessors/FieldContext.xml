@@ -21,13 +21,8 @@
 		<!-- type for spanish text -->
 		<fieldType name="text_esp" class="solr.TextField"
 			positionIncrementGap="100">
-			<analyzer>
-				<tokenizer class="solr.StandardTokenizerFactory" />
-				<filter class="solr.LowerCaseFilterFactory" />
-				<filter class="solr.StopFilterFactory" ignoreCase="true"
-					words="lang/stopwords_es.txt" format="snowball" />
-				<filter class="solr.PorterStemFilterFactory" />
-			</analyzer>
+			<analyzer class="org.apache.lucene.analysis.es.SpanishAnalyzer" />
+
 		</fieldType>
 	</field_type>
 

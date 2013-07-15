@@ -5,7 +5,8 @@
 		<type name="geo" />
 
 		<!-- type for english text -->
-		<fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+		<fieldType name="text_en" class="solr.TextField"
+			positionIncrementGap="100">
 			<analyzer>
 				<tokenizer class="solr.StandardTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
@@ -28,24 +29,28 @@
 				<filter class="solr.PorterStemFilterFactory" />
 			</analyzer>
 		</fieldType>
+
+		<fieldType name="txt_esp_default" class="solr.TextField">
+			<analyzer class="org.apache.lucene.analysis.el.SpanishAnalyzer" />
+		</fieldType>
 	</field_type>
 
 
 	<!-- field definitions here -->
 	<field_defintion>
-		<field name = "PMN" type="text_en" indexed="true" stored="true"
+		<field name="PMN" type="text_en" indexed="true" stored="true"
 			required="true" multiValued="false" />
-		<field name = "PMN_s" type="text_esp" indexed="true" stored="true"
+		<field name="PMN_s" type="text_esp" indexed="true" stored="true"
 			required="true" multiValued="false" />
-		<field name = "PMI " type="numeric" indexed="true" stored="true"
+		<field name="PMI " type="numeric" indexed="true" stored="true"
 			required="true" multiValued="false" />
-		<field name = "DPMI" type="numeric" indexed="true" stored="true"
+		<field name="DPMI" type="numeric" indexed="true" stored="true"
 			required="true" multiValued="false" />
-		<field name = "AR" type="numeric" indexed="true" stored="true"
+		<field name="AR" type="numeric" indexed="true" stored="true"
 			required="true" multiValued="false" />
-		<field name = "PFN" type="text_en" indexed="true" stored="true"
+		<field name="PFN" type="text_en" indexed="true" stored="true"
 			required="true" multiValued="false" />
-		<field name = "PFN_s" type="text_esp" indexed="true" stored="true"
+		<field name="PFN_s" type="text_esp" indexed="true" stored="true"
 			required="true" multiValued="false" />
 	</field_defintion>
 

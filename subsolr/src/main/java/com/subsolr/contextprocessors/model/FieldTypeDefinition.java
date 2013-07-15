@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.FieldInfo;
 
-public class FieldDefinition {
-	private String fieldName;
+public class FieldTypeDefinition {
+	private String fieldTypeName;
 
 	private FieldInfo fieldInfo;
 	
@@ -28,11 +28,11 @@ public class FieldDefinition {
 		this.analyzers = analyzers;
 	}
 
-	public String getFieldName() {
-		return fieldName;
+	public String getFieldTypeName() {
+		return fieldTypeName;
 	}
 
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
+	public void setFieldTypeName(String fieldTypeName) {
+		this.fieldTypeName = fieldTypeName;
 	}
 }

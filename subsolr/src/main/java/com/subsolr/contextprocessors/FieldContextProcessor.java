@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.apache.lucene.document.Field;
 
-import com.subsolr.contextprocessors.model.FieldDefinition;
+import com.subsolr.contextprocessors.model.FieldTypeDefinition;
 
 /**
  * Reads the FieldContext and generates the FieldDefinition list and the Domain
@@ -15,16 +15,16 @@ import com.subsolr.contextprocessors.model.FieldDefinition;
  */
 public class FieldContextProcessor {
 	private static String confFile = "FieldContext.xml";
-	private static Map<String, FieldDefinition> fieldDefinitions;
+	private static Map<String, FieldTypeDefinition> fieldTypeDefinitions;
 
-	public static Map<Field, FieldDefinition> getAllFields() {
+	public static Map<Field, FieldTypeDefinition> getAllFields() {
 		// code here to return the list of available field definitions
 		return null;
 	}
 
-	// will want to do a get by name .. worry about implementation later.
-	public FieldDefinition getFieldDefinition(String fieldName) {
-		return fieldDefinitions.get(fieldName);
+	
+	public FieldTypeDefinition getFieldDefinition(String fieldTypeName) {
+		return fieldTypeDefinitions.get(fieldTypeName);
 
 	}
 }
