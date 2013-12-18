@@ -1,6 +1,6 @@
 package com.subsolr.index;
 
-import com.subsolr.contextprocessors.model.DocumentDefinition;
+import com.subsolr.contextprocessor.model.DocumentDefinition;
 
 /**
  * Class that holds index configuration details like name , directorypath,

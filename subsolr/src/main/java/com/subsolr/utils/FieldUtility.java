@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.subsolr.contextprocessors.model.FieldTypeDefinition;
+import com.subsolr.contextprocessor.model.FieldTypeDefinition;
 
 public class FieldUtility {
 	private static final String fieldType = "fieldType";

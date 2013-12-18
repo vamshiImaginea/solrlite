@@ -28,13 +28,12 @@
 			<artifactId>lucene-snowball</artifactId>
 			<version>3.0.3</version>
 		</dependency>
-		<!-- for solr schema classes 
+		<!-- for solr schema classes -->
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-core</artifactId>
 			<version>4.3.1</version>
-		</dependency>-->
-
+		</dependency>
 		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
@@ -44,7 +43,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-		</dependency>
-
+		</dependency>		
 	</dependencies>
 </project>

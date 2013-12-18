@@ -1,8 +1,8 @@
-package com.subsolr.contextprocessors;
+package com.subsolr.contextprocessor;
 
 import java.util.List;
 
-import com.subsolr.contextprocessors.model.DocumentDefinition;
+import com.subsolr.contextprocessor.model.DocumentDefinition;
 
 /**
  * Reads the Document context and creates the document defnition list.

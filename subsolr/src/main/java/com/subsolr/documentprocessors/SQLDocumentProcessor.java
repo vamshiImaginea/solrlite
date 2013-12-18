@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.lucene.document.Document;
 
-import com.subsolr.contextprocessors.model.DocumentDefinition;
+import com.subsolr.contextprocessor.model.DocumentDefinition;
 /**
  * For using SQLEntityProcessor and generating documents out of databases.
  * @author aditya

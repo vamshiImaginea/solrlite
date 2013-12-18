@@ -1,4 +1,4 @@
-package com.subsolr.contextprocessors.model;
+package com.subsolr.contextprocessor.model;
 
 import java.util.Map;
 
