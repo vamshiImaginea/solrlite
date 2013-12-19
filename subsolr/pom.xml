@@ -4,7 +4,9 @@
 	<groupId>subsolr</groupId>
 	<artifactId>subsolr</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
+	<properties>
+		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
@@ -43,6 +45,33 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-		</dependency>		
+		</dependency>	
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava-collections</artifactId>
+			<version>r03</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.1</version>
+		</dependency>	
 	</dependencies>
 </project>
