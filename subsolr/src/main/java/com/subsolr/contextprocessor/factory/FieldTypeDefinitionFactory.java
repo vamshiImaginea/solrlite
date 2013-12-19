@@ -61,16 +61,14 @@ public final class FieldTypeDefinitionFactory {
       if (analyzerName != null) {
         try {
           // No need to be core-aware as Analyzers are not in the core-aware list
-          final Class<? extends Analyzer> clazz = loader.findClass
-            (analyzerName).asSubclass(Analyzer.class);
+          final Class<? extends Analyzer> clazz = Class.forName(analyzerName).asSubclass(Analyzer.class);
 
           try {
             // first try to use a ctor with version parameter 
             // (needed for many new Analyzers that have no default one anymore)
             Constructor<? extends Analyzer> cnstr = clazz.getConstructor(Version.class);
             final String matchVersionStr = DOMUtil.getAttr(attrs, LUCENE_MATCH_VERSION_PARAM);
-            final Version luceneMatchVersion = (matchVersionStr == null) ?
-              solrConfig.luceneMatchVersion : Config.parseLuceneVersionString(matchVersionStr);
+            final Version luceneMatchVersion = (matchVersionStr == null) ?solrConfig.luceneMatchVersion : Config.parseLuceneVersionString(matchVersionStr);
             if (luceneMatchVersion == null) {
               throw new SolrException
                 ( SolrException.ErrorCode.SERVER_ERROR,
