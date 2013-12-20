@@ -1,7 +1,16 @@
 package com.subsolr.contextprocessor;
 
-import java.util.List;
+import java.io.File;
+import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.xpath.XPath;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import com.google.common.collect.Maps;
 import com.subsolr.contextprocessor.model.DocumentDefinition;
 
 /**
@@ -10,14 +19,38 @@ import com.subsolr.contextprocessor.model.DocumentDefinition;
  * @author aditya
  * 
  */
-public class DocumentContextProcessor {
-	List<DocumentDefinition> getDocumentDefinitions() {
-		// code here to read the xml and list out all the document definitions
-		return null;
+public class DocumentContextProcessor implements InitializingBean {
+
+	private final FieldContextProcessor fieldContextProcessor;
+	private final XPath xPath;
+	private final DocumentBuilder documentBuilder;
+	private final String documentConfigFiles;
+	
+
+	
+	public DocumentContextProcessor(String documentConfigFiles, FieldContextProcessor fieldContextProcessor, XPath xPath, DocumentBuilder documentBuilder) {
+		this.fieldContextProcessor = fieldContextProcessor;
+		this.xPath = xPath;
+		this.documentBuilder = documentBuilder;
+		this.documentConfigFiles = documentConfigFiles;
+	}
+	private Map<String, DocumentDefinition> documentDefinitionsByName;
+
+
+	Map<String,DocumentDefinition> getDocumentDefinitions() {
+		return documentDefinitionsByName;
 	}
 
-	// to return the document definition identified by name.
 	DocumentDefinition getDocumentDefinitionByName(String documentName) {
-		return null;
+		return documentDefinitionsByName.get(documentName);
+	}
+
+	public void afterPropertiesSet() throws Exception {
+		Document DocumentTypeConfigDocument = documentBuilder.parse(new File(documentConfigFiles));
+		setDocumentDefinitions(DocumentTypeConfigDocument.getElementsByTagName("document"));
+	}
+
+	private void setDocumentDefinitions(NodeList DocumentDefinitionNodeList) {
+		documentDefinitionsByName = Maps.<String,DocumentDefinition>newHashMap();
 	}
 }
