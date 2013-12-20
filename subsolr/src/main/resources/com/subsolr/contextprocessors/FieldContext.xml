@@ -1,29 +1,29 @@
 <schema>
 	<field_type_defns_defns>
 		<!-- type for english text -->
-		<field_type name="text_en" class="solr.TextField"
+		<field_type name="text_en" class="org.apache.solr.TextField"
 			positionIncrementGap="100">
 			<similarity class="org.apache.lucene.search.similarities.DefaultSimilarity"/>
 				<analyzer>
-					<tokenizer class="solr.StandardTokenizerFactory" />
-					<filter class="solr.LowerCaseFilterFactory" />
-					<filter class="solr.StopFilterFactory" ignoreCase="true"
+					<tokenizer class="org.apache.solr.StandardTokenizerFactory" />
+					<filter class="org.apache.solr.LowerCaseFilterFactory" />
+					<filter class="org.apache.solr.StopFilterFactory" ignoreCase="true"
 						words="lang/stopwords_es.txt" format="snowball" />
-					<filter class="solr.SpanishLightStemFilterFactory" />
+					<filter class="org.apache.solr.SpanishLightStemFilterFactory" />
 					<!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" 
 						language="Spanish"/> -->
 				</analyzer>
 		</field_type>
 
 		<!-- type for spanish text -->
-		<field_type name="text_esp" class="solr.TextField"
+		<field_type name="text_esp" class="org.apache.solr.TextField"
 			positionIncrementGap="100">
 			<analyzer>
-				<tokenizer class="solr.StandardTokenizerFactory" />
-				<filter class="solr.LowerCaseFilterFactory" />
-				<filter class="solr.StopFilterFactory" ignoreCase="true"
+				<tokenizer class="org.apache.solr.StandardTokenizerFactory" />
+				<filter class="org.apache.solr.LowerCaseFilterFactory" />
+				<filter class="org.apache.solr.StopFilterFactory" ignoreCase="true"
 					words="lang/stopwords_es.txt" format="snowball" />
-				<filter class="solr.PorterStemFilterFactory" />
+				<filter class="org.apache.solr.PorterStemFilterFactory" />
 			</analyzer>
 		</field_type>
 
