@@ -72,6 +72,15 @@ public class FieldTypeDefinition {
    public void setSimilarityClassName(Similarity similarityClassName) {
       this.similarityClassName = similarityClassName;
    }
+public FieldTypeDefinition(String name, FieldType fieldTypeClassName, Integer positionIncrementGap, Similarity similarityClassName, SolrAnalyzer analyzer) {
+	this.name = name;
+	this.fieldTypeClassName = fieldTypeClassName;
+	this.positionIncrementGap = positionIncrementGap;
+	this.similarityClassName = similarityClassName;
+	this.analyzer = analyzer;
+}
+
+
 	
 
 	
