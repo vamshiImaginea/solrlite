@@ -44,6 +44,24 @@ public class FieldContextProcessor implements InitializingBean {
 		this.xPath = xPath;
 	}
 
+	public Map<String, FieldTypeDefinition> getFieldTypeDefinitionsByName() {
+		return fieldTypeDefinitionsByName;
+	}
+
+	public void setFieldTypeDefinitionsByName(
+			Map<String, FieldTypeDefinition> fieldTypeDefinitionsByName) {
+		this.fieldTypeDefinitionsByName = fieldTypeDefinitionsByName;
+	}
+
+	public Map<String, FieldDefinition> getFieldDefinitionsByName() {
+		return fieldDefinitionsByName;
+	}
+
+	public void setFieldDefinitionsByName(
+			Map<String, FieldDefinition> fieldDefinitionsByName) {
+		this.fieldDefinitionsByName = fieldDefinitionsByName;
+	}
+
 	private Map<String, FieldTypeDefinition> fieldTypeDefinitionsByName;
 	private Map<String, FieldDefinition> fieldDefinitionsByName;
 

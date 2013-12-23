@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <documents>
 	<!-- configure data sources here -->
-	<datasource id="ds1">
+	<SQLdatasource id="ds1">
 		<host>xxxx</host>
 		<userid> xxxx</userid>
 		<password>yyyy</password>
-	</datasource>
+		<driver> pgsql</driver>
+	</SQLdatasource>
+	
+	<Filedatasource id="ds2">
+		<host>xxxx</host>
+		<userid> xxxx</userid>
+		<password>yyyy</password>
+		<type>JSON</type>
+	</Filedatasource>
 
 	<!-- configure documents here -->
-	<document name="ProcedureDocument" import_type="DBImport"
-		sourceId="ds1" EntityProcessor="com.castlighthealth.EntityProcessor.SQLEntityProcessor"
-		autoIncrement="true">
+	<document name="ProcedureDocument" >
 
-		<fieldset name="procedure">
+		<fieldset name="procedure" 
+		sourceId="ds1" EntityProcessor="com.castlighthealth.EntityProcessor.SQLEntityProcessor">
 			<field column_name="PMI" query_map_name="DEFAULT_PROCEDURE_ID" />
 			<field column_name="PFI" query_map_name="PF_ID" />
 			<field column_name="PFN" query_map_name="PF_NAME" />
@@ -34,7 +41,8 @@
 				<max_cached_results> 10000 </max_cached_results>
 			</query>
 		</fieldset>
-		<fieldset name="key_word">
+		<fieldset name="key_word" 
+		sourceId="ds2" EntityProcessor="com.castlighthealth.EntityProcessor.FileEntityProcessor">
 			<!-- for key words -->
 		</fieldset>
 		<fieldset name="procedure_family">
