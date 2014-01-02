@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <documents>
 	<!-- configure data sources here -->
-	<datasource id="ds1">
+	<SQLdatasource id="ds1">
 		<host>xxxx</host>
 		<userid> xxxx</userid>
 		<password>yyyy</password>
-	</datasource>
+		<driver> pgsql</driver>
+	</SQLdatasource>
+
+	<Filedatasource id="ds2">
+		<host>xxxx</host>
+		<userid> xxxx</userid>
+		<password>yyyy</password>
+		<type>JSON</type>
+	</Filedatasource>
 
 	<!-- configure documents here -->
-	<document name="ProcedureDocument" import_type="DBImport"
-		sourceId="ds1" EntityProcessor="com.castlighthealth.EntityProcessor.SQLEntityProcessor"
-		autoIncrement="true">
+	<document name="ProcedureDocument">
 
-		<fieldset name="procedure">
-			<field column_name="PMI" query_map_name="DEFAULT_PROCEDURE_ID" />
-			<field column_name="PFI" query_map_name="PF_ID" />
-			<field column_name="PFN" query_map_name="PF_NAME" />
-			<field column_name="DPFGN" query_map_name="PF_GRP_NAME" />
-			<field column_name="PFSN" query_map_name="PF_S_NAME" />
+		<fieldset name="procedure" sourceId="ds1" EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
+			<field column_name="EMP_ID" field_map_name="EMP_ID" />
+			<field column_name="EMP_NAME" field_map_name="EMP_NAME" />
+			<field column_name="EMP_GENDER" field_map_name="EMP_GENDER" />
+			<field column_name="EMP_HIRE_DATE" field_map_name="EMP_HIRE_DATE" />
 			<query>
 				<statement>
 					SELECT
-					pmd.id AS DEFAULT_PROCEDURE_ID ,
-					pf.id AS PF_ID ,
-					pf.name AS PF_NAME,
-					pf.disambiguation_group_name AS PF_GRP_NAME,
-					pf.short_name AS PF_S_NAME
-					FROM procedure_families pf,
-					procedure_mappings AS pmd
-					ON pmd.procedure_family_id = pf.id
-					WHERE pmd.default=1
+					emp_no as EMP_ID,
+					first_name as EMP_NAME,
+					gender as EMP_GENDER,
+					hire_date as EMP_HIRE_DATE
+					FROM
+					employees
 				</statement>
 				<max_cached_results> 10000 </max_cached_results>
 			</query>
 		</fieldset>
-		<fieldset name="key_word">
+		<fieldset name="key_word" sourceId="ds2"
+			EntityProcessor="com.subsolr.entityprocessors.FileEntityProcessor">
 			<!-- for key words -->
 		</fieldset>
 		<fieldset name="procedure_family">
