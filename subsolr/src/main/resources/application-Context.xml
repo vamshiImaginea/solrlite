@@ -11,14 +11,16 @@
 	<context:property-placeholder location="classpath:application.properties" />
 
 	<bean id="fieldContextProcessor" class="com.subsolr.contextprocessors.FieldContextProcessor">
-		<constructor-arg index="0"	value="classpath:/com/subsolr/contextprocessors/FieldContext.xml" />
+		<constructor-arg index="0"
+			value="classpath:/com/subsolr/contextprocessors/FieldContext.xml" />
 		<constructor-arg index="1" ref="documentBuilder" />
 		<constructor-arg index="2" ref="xPath" />
 
 	</bean>
 
 	<bean id="documentContextProcessor" class="com.subsolr.contextprocessors.DocumentContextProcessor">
-		<constructor-arg index="0" value="classpath:/com/subsolr/contextprocessors/DocumentContext.xml" />
+		<constructor-arg index="0"
+			value="classpath:/com/subsolr/contextprocessors/DocumentContext.xml" />
 		<constructor-arg index="1" ref="fieldContextProcessor" />
 		<constructor-arg index="2" ref="xPath" />
 		<constructor-arg index="3" ref="documentBuilder" />
@@ -32,6 +34,12 @@
 		factory-method="newInstance" />
 	<bean id="xPath" factory-bean="xPathFactory" factory-method="newXPath" />
 
-
+	<bean id="mockedDocumentContextProcessor" name="documentContextProcessor" class="com.subsolr.contextprocessors.StubbedDocumentContextProcessor">
+			<constructor-arg index="0"
+			value="classpath:/com/subsolr/contextprocessors/DocumentContext.xml" />
+		<constructor-arg index="1" ref="fieldContextProcessor" />
+		<constructor-arg index="2" ref="xPath" />
+		<constructor-arg index="3" ref="documentBuilder" />
+	</bean>
 
 </beans>

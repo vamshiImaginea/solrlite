@@ -53,8 +53,8 @@ public class FieldContextProcessor implements InitializingBean {
 		this.fieldTypeDefinitionsByName = fieldTypeDefinitionsByName;
 	}
 
-	public Map<String, FieldDefinition> getFieldDefinitionsByName() {
-		return fieldDefinitionsByName;
+	public FieldDefinition getFieldDefinitionsByName(String name) {
+		return fieldDefinitionsByName.get(name);
 	}
 
 	public void setFieldDefinitionsByName(
