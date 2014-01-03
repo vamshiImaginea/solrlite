@@ -1,12 +1,15 @@
 package com.subsolr.contextprocessor;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.xpath.XPath;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.subsolr.contextprocessor.model.DocumentDefinition;
+import com.subsolr.contextprocessor.model.FieldSetDefinition;
 import com.subsolr.entityprocessors.StubbedEntityProcessor;
 
 public class StubbedDocumentContextProcessor extends DocumentContextProcessor {
@@ -22,7 +25,13 @@ public class StubbedDocumentContextProcessor extends DocumentContextProcessor {
 		Map<String, DocumentDefinition> mockedDocumentDefinitions = Maps.newHashMap();
 		DocumentDefinition mockedDocumentDefintion = new DocumentDefinition();
 		mockedDocumentDefintion.setDocumentName("TestDocumnet");
-		mockedDocumentDefintion.setEntityProcessor(new StubbedEntityProcessor(fieldContextProcessor));
+
+		FieldSetDefinition mockedFieldSetDef = new FieldSetDefinition();
+		mockedFieldSetDef.setEntityProcessor(new StubbedEntityProcessor(fieldContextProcessor));
+		List<FieldSetDefinition> fieldSets = Lists.newArrayList();
+		fieldSets.add(mockedFieldSetDef);
+		mockedDocumentDefintion.setFieldSets(fieldSets);
+		//mockedDocumentDefintion.setEntityProcessor(new StubbedEntityProcessor(fieldContextProcessor));
 		return mockedDocumentDefinitions;
 	}
 
