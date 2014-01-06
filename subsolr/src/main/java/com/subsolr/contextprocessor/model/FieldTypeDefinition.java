@@ -1,5 +1,6 @@
 package com.subsolr.contextprocessor.model;
 
+import org.apache.lucene.document.Field;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.solr.analysis.SolrAnalyzer;
 import org.apache.solr.schema.FieldType;
@@ -7,7 +8,7 @@ import org.apache.solr.schema.FieldType;
 
 public class FieldTypeDefinition {
 	private String name;
-	private FieldType fieldTypeClassName;
+	private Class<?extends FieldType> fieldTypeClassName;
 	private Integer positionIncrementGap;
 	private Similarity similarityClassName;
 	private SolrAnalyzer analyzer;
@@ -23,18 +24,7 @@ public class FieldTypeDefinition {
    public void setName(String name) {
       this.name = name;
    }
-   /**
-    * @return the fieldTypeClassName
-    */
-   public FieldType getFieldTypeClassName() {
-      return fieldTypeClassName;
-   }
-   /**
-    * @param fieldTypeClassName the fieldTypeClassName to set
-    */
-   public void setFieldTypeClassName(FieldType fieldTypeClassName) {
-      this.fieldTypeClassName = fieldTypeClassName;
-   }
+  
    /**
     * @return the positionIncrementGap
     */
@@ -72,12 +62,18 @@ public class FieldTypeDefinition {
    public void setSimilarityClassName(Similarity similarityClassName) {
       this.similarityClassName = similarityClassName;
    }
-public FieldTypeDefinition(String name, FieldType fieldTypeClassName, Integer positionIncrementGap, Similarity similarityClassName, SolrAnalyzer analyzer) {
+public FieldTypeDefinition(String name, Class<? extends FieldType> fieldTypeClass, Integer positionIncrementGap, Similarity similarityClassName, SolrAnalyzer analyzer) {
 	this.name = name;
-	this.fieldTypeClassName = fieldTypeClassName;
+	this.fieldTypeClassName = fieldTypeClass;
 	this.positionIncrementGap = positionIncrementGap;
 	this.similarityClassName = similarityClassName;
 	this.analyzer = analyzer;
+}
+public Class<?extends FieldType> getFieldTypeClassName() {
+	return fieldTypeClassName;
+}
+public void setFieldTypeClassName(Class<?extends FieldType> fieldTypeClassName) {
+	this.fieldTypeClassName = fieldTypeClassName;
 }
 
 

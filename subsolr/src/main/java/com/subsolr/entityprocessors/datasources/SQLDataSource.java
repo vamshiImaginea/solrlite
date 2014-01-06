@@ -1,6 +1,13 @@
 package com.subsolr.entityprocessors.datasources;
 
-public class SQLDataSource implements DataSource {
+public class SQLDataSource implements DataSource{
+
+	public SQLDataSource(String driver, String url, String userId, String password) {
+		this.driver = driver;
+		this.url = url;
+		this.userId = userId;
+		this.password = password;
+	}
 
 	private String driver;
 	private String url;
