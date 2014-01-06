@@ -23,19 +23,18 @@ public class SQLEntityProcessor implements EntityProcessor {
 
 	private FieldContextProcessor fieldContextProcessor;
 
-	private FieldSetDefinition fieldSetDefinition;
-
-	private String query;
+	public SQLEntityProcessor(FieldContextProcessor fieldContextProcessor) {
+		this.fieldContextProcessor = fieldContextProcessor;
+	}
 
 	public static final Logger logger = LoggerFactory.getLogger(SQLEntityProcessor.class);
 
-	public List<Record> getRecords() {
+	public List<Record> getRecords(FieldSetDefinition fieldSetDefinition) {
 		SQLDataSource sqlDataSource = (SQLDataSource) fieldSetDefinition.getDataSource();
 		final List<Record> records = Lists.newArrayList();
-		final Map<String, String> fieldName2DataSourceMap = fieldSetDefinition.getFieldName2DataSourceMap();
-
+		final Map<String, String> fieldName2DataSourceMap = fieldSetDefinition.getFieldNameToEntityNameMap();
 		JdbcTemplate jdbcTemplate = getJdbcTempate(sqlDataSource);
-		jdbcTemplate.query(getQuery(), new RowCallbackHandler() {
+		jdbcTemplate.query(fieldSetDefinition.getQuery(), new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
 				Map<FieldDefinition, String> valueByIndexName = Maps.newHashMap();
 				for (String fieldName : fieldName2DataSourceMap.keySet()) {
@@ -73,21 +72,6 @@ public class SQLEntityProcessor implements EntityProcessor {
 	public void setFieldContextProcessor(FieldContextProcessor fieldContextProcessor) {
 		this.fieldContextProcessor = fieldContextProcessor;
 	}
-
-	public FieldSetDefinition getFieldSetDefinition() {
-		return fieldSetDefinition;
-	}
-
-	public void setFieldSetDefinition(FieldSetDefinition fieldSetDefinition) {
-		this.fieldSetDefinition = fieldSetDefinition;
-	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
+	
 
 }
