@@ -18,6 +18,7 @@ import org.apache.solr.analysis.SolrAnalyzer;
 import org.apache.solr.analysis.TokenizerChain;
 import org.apache.solr.schema.FieldType;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.Resource;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -35,12 +36,12 @@ import com.subsolr.contextprocessor.model.FieldTypeDefinition;
  * 
  */
 public class FieldContextProcessor implements InitializingBean {
-	private String fieldConfigFileName;
+	 private Resource resource;
 	private DocumentBuilder documentBuilder;
 	private XPath xPath;
 
-	public FieldContextProcessor(String fieldConfigFileName, DocumentBuilder documentBuilder, XPath xPath) {
-		this.fieldConfigFileName = fieldConfigFileName;
+	public FieldContextProcessor(Resource resource, DocumentBuilder documentBuilder, XPath xPath) {
+		this.resource = resource;
 		this.documentBuilder = documentBuilder;
 		this.xPath = xPath;
 	}
@@ -66,7 +67,7 @@ public class FieldContextProcessor implements InitializingBean {
 	private Map<String, FieldTypeDefinition> fieldTypeDefinitionsByName;
 	private Map<String, FieldDefinition> fieldDefinitionsByName;
 
-	private void setFieldDefinitions(NodeList fieldTypeDefinitionNodes) throws XPathExpressionException, InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private void setFieldTypeDefinitions(NodeList fieldTypeDefinitionNodes) throws XPathExpressionException, InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		fieldTypeDefinitionsByName = Maps.<String, FieldTypeDefinition> newHashMap();
 		int noOfFieldTypeDefinitons = fieldTypeDefinitionNodes.getLength();
 		for (int i = 0; i < noOfFieldTypeDefinitons; i++) {
@@ -111,16 +112,19 @@ public class FieldContextProcessor implements InitializingBean {
 	private Map<String, String> toMap(NamedNodeMap attributes) {
 		int noOfAttributes = attributes.getLength();
 		Map<String, String> attributesMap = Maps.<String, String> newHashMap();
+		attributesMap.put("luceneMatchVersion", "LUCENE_43");
 		for (int i = 0; i < noOfAttributes; i++) {
 			attributesMap.put(attributes.item(i).getNodeName(), attributes.item(i).getNodeValue());
 		}
 		return attributesMap;
 	}
 
-	private void setFieldTypeDefinitions(NodeList fieldDefinitionNodes) {
+	private void setFieldDefinitions(NodeList fieldDefinitionNodes) {
 		fieldDefinitionsByName = Maps.<String, FieldDefinition> newHashMap();
-		int noOfFieldDefinitons = fieldDefinitionNodes.getLength();
-		for (int i = 0; i < noOfFieldDefinitons; i++) {
+		int noOfFieldDefinitonSets = fieldDefinitionNodes.getLength();
+		
+		
+		for (int i = 0; i < noOfFieldDefinitonSets; i++) {
 			Node fieldDefinitionNode = fieldDefinitionNodes.item(i);
 			String fieldName = getAttributeValueInNode(fieldDefinitionNode, "name");
 			FieldDefinition fieldDefinition = new FieldDefinition.FieldDefinitionBuilder().fieldName(fieldName).fieldTypeDefinition(fieldTypeDefinitionsByName.get(getAttributeValueInNode(fieldDefinitionNode, "type"))).analyzed(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "analyzed"))).stored(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "stored"))).indexed(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "indexed"))).mandatory(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "required"))).build();
@@ -134,9 +138,9 @@ public class FieldContextProcessor implements InitializingBean {
 	}
 
 	public void afterPropertiesSet() throws Exception {
-		Document fieldConfigDocument = documentBuilder.parse(new File(fieldConfigFileName));
-		setFieldTypeDefinitions(fieldConfigDocument.getElementsByTagName("field_type"));
-		setFieldDefinitions(fieldConfigDocument.getElementsByTagName("field"));
+		Document fieldConfigDocument = documentBuilder.parse(resource.getFile());
+		setFieldTypeDefinitions(fieldConfigDocument.getElementsByTagName("field_type") );
+		setFieldDefinitions(fieldConfigDocument.getElementsByTagName("field") );
 	}
 
 }

@@ -81,7 +81,7 @@ public class IndexBuilder implements InitializingBean {
 		for (Entry<String, DocumentDefinition> documentEntryDefinition : documentDefinitions.entrySet()) {
 			String doucmentName = documentEntryDefinition.getKey();
 			DocumentDefinition documentDefinition = documentEntryDefinition.getValue();
-			List<Record> recordsToBeIndexed = documentDefinition.getRecordsToBeIndexedd();
+			List<Record> recordsToBeIndexed = documentDefinition.getRecordsToBeIndexed();
 			indexRecordsForDocument(recordsToBeIndexed, doucmentName);
 
 		}

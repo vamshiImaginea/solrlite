@@ -2,10 +2,10 @@
 <documents>
 	<!-- configure data sources here -->
 	<SQLdatasource id="ds1">
-		<host>xxxx</host>
-		<userid> xxxx</userid>
-		<password>yyyy</password>
-		<driver> pgsql</driver>
+		<host>jdbc:mysql://localhost:3306/subsolr</host>
+		<userid>solarlite</userid>
+		<password>password</password>
+		<driver>com.mysql.jdbc.Driver</driver>
 	</SQLdatasource>
 
 	<Filedatasource id="ds2">
@@ -36,13 +36,13 @@
 				<max_cached_results> 10000 </max_cached_results>
 			</query>
 		</fieldset>
-		<fieldset name="key_word" sourceId="ds2"
+		<!-- <fieldset name="key_word" sourceId="ds1"
 			EntityProcessor="com.subsolr.entityprocessors.FileEntityProcessor">
-			<!-- for key words -->
+			for key words
 		</fieldset>
 		<fieldset name="procedure_family">
-			<!-- for procedure family info -->
-		</fieldset>
+			for procedure family info
+		</fieldset> -->
 	</document>
 
 </documents>

@@ -3,10 +3,8 @@
  */
 package com.subsolr.index;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.subsolr.documentprocessors.DocumentProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author aditya
@@ -18,11 +16,9 @@ public class TestDriver {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
-		Map<String, IndexConfiguration> propertyMap = new HashMap<String, IndexConfiguration>();
-		for (String indexName : propertyMap.keySet()) {
-			IndexBuilder.createIndex(indexName, propertyMap.get(indexName));
-		}
+		System.out.println("Starting SolrLite Indexing");
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:/application-Context.xml");
+		System.out.println("End of  SolrLite Indexing");
 
 	}
 
