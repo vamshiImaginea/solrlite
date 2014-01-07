@@ -12,6 +12,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.lucene.analysis.util.CharFilterFactory;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.analysis.util.TokenizerFactory;
+import org.apache.lucene.document.Field;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.solr.analysis.SolrAnalyzer;
 import org.apache.solr.analysis.TokenizerChain;
@@ -74,7 +75,9 @@ public class FieldContextProcessor implements InitializingBean {
 			Node analyzerNode = (Node) xPath.evaluate("./analyzer", fieldTypeDefinitionNode, XPathConstants.NODE);
 
 			String fieldTypeName = getAttributeValueInNode(fieldTypeDefinitionNode, "name");
-			FieldTypeDefinition fieldTypeDefinition = new FieldTypeDefinition(fieldTypeName, FieldType.class.cast(Class.forName(getAttributeValueInNode(fieldTypeDefinitionNode, "class")).newInstance()), Integer.valueOf(getAttributeValueInNode(fieldTypeDefinitionNode, "positionIncrementGap")), Similarity.class.cast(Class.forName(getAttributeValueInNode(similarityNode, "class")).newInstance()), getAnalyzer(analyzerNode));
+			Class<? extends FieldType> fieldTypeClass= (Class<? extends FieldType>) Class.forName(getAttributeValueInNode(fieldTypeDefinitionNode, "class"));	
+			FieldTypeDefinition fieldTypeDefinition = 
+					new FieldTypeDefinition(fieldTypeName,fieldTypeClass, Integer.valueOf(getAttributeValueInNode(fieldTypeDefinitionNode, "positionIncrementGap")), Similarity.class.cast(Class.forName(getAttributeValueInNode(similarityNode, "class")).newInstance()), getAnalyzer(analyzerNode));
 			fieldTypeDefinitionsByName.put(fieldTypeName, fieldTypeDefinition);
 
 		}

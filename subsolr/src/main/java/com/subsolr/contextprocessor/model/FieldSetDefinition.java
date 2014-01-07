@@ -7,9 +7,11 @@ import com.subsolr.entityprocessors.datasources.DataSource;
 
 public class FieldSetDefinition {
 
-	private Map<String, String> fieldName2DataSourceMap;
+	private Map<String, String> fieldNameToEntityNameMap;
 	private DataSource dataSource;
 	private EntityProcessor entityProcessor;
+	private String query; // TODO generalize for all field set definitions ...
+							// properties ??
 
 	public DataSource getDataSource() {
 		return dataSource;
@@ -27,12 +29,20 @@ public class FieldSetDefinition {
 		this.entityProcessor = entityProcessor;
 	}
 
-	public Map<String, String> getFieldName2DataSourceMap() {
-		return fieldName2DataSourceMap;
+	public String getQuery() {
+		return query;
 	}
 
-	public void setFieldName2DataSourceMap(Map<String, String> fieldName2DataSourceMap) {
-		this.fieldName2DataSourceMap = fieldName2DataSourceMap;
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+	public Map<String, String> getFieldNameToEntityNameMap() {
+		return fieldNameToEntityNameMap;
+	}
+
+	public void setFieldNameToEntityNameMap(Map<String, String> fieldNameToEntityNameMap) {
+		this.fieldNameToEntityNameMap = fieldNameToEntityNameMap;
 	}
 
 }

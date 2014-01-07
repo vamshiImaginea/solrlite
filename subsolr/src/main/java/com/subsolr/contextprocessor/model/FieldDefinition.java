@@ -69,5 +69,29 @@ public class FieldDefinition {
 		}
 
 	}
+	
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public FieldTypeDefinition getFieldTypeDefinition() {
+		return fieldTypeDefinition;
+	}
+
+	public boolean isIndexed() {
+		return indexed;
+	}
+
+	public boolean isStored() {
+		return stored;
+	}
+
+	public boolean isAnalyzed() {
+		return analyzed;
+	}
+
+	public boolean isMandatory() {
+		return mandatory;
+	}
 
 }
