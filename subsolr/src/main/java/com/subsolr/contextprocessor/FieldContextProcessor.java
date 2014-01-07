@@ -95,14 +95,14 @@ public class FieldContextProcessor implements InitializingBean {
 		TokenFilterFactory[] tokenFilters = new TokenFilterFactory[totalFilters];
 		for (int i = 0; i < totalFilters; i++) {
 			Node filterNode = filterNodes.item(i);
-			tokenFilters[i] = TokenFilterFactory.forName(getAttributeValueInNode(tokenizerNode, "class"), toMap(filterNode.getAttributes()));
+			tokenFilters[i] = TokenFilterFactory.forName(getAttributeValueInNode(filterNode, "class"), toMap(filterNode.getAttributes()));
 		}
 		totalFilters = charFilterNodes.getLength();
 		CharFilterFactory[] charFilters = new CharFilterFactory[totalFilters];
 
 		for (int i = 0; i < totalFilters; i++) {
 			Node filterNode = charFilterNodes.item(i);
-			charFilters[i] = CharFilterFactory.forName(getAttributeValueInNode(tokenizerNode, "class"), toMap(filterNode.getAttributes()));
+			charFilters[i] = CharFilterFactory.forName(getAttributeValueInNode(filterNode, "class"), toMap(filterNode.getAttributes()));
 		}
 
 		return new TokenizerChain(charFilters, tokenizer, tokenFilters);
@@ -112,7 +112,7 @@ public class FieldContextProcessor implements InitializingBean {
 	private Map<String, String> toMap(NamedNodeMap attributes) {
 		int noOfAttributes = attributes.getLength();
 		Map<String, String> attributesMap = Maps.<String, String> newHashMap();
-		attributesMap.put("luceneMatchVersion", "LUCENE_43");
+		attributesMap.put("luceneMatchVersion", "LUCENE_CURRENT");
 		for (int i = 0; i < noOfAttributes; i++) {
 			attributesMap.put(attributes.item(i).getNodeName(), attributes.item(i).getNodeValue());
 		}
