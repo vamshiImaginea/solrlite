@@ -33,8 +33,9 @@ public class DocumentDefinition {
 	}
 	
 	//TODO merge field sets
-	public List<Record> getRecordsToBeIndexedd(){
-		return fieldSets.get(0).getEntityProcessor().getRecords(fieldSets.get(0));
+	public List<Record> getRecordsToBeIndexed(){
+		FieldSetDefinition fieldSetDefinition = fieldSets.get("procedure");
+		return fieldSetDefinition.getEntityProcessor().getRecords(fieldSets.get("procedure"));
 	}
 	
 	

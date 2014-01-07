@@ -36,6 +36,7 @@ public class SQLEntityProcessor implements EntityProcessor {
 		JdbcTemplate jdbcTemplate = getJdbcTempate(sqlDataSource);
 		jdbcTemplate.query(fieldSetDefinition.getQuery(), new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
+				logger.debug("columns received"+rs.getMetaData().getColumnCount());
 				Map<FieldDefinition, String> valueByIndexName = Maps.newHashMap();
 				for (String fieldName : fieldName2DataSourceMap.keySet()) {
 					String fieldValue = rs.getString(fieldName2DataSourceMap.get(fieldName));
