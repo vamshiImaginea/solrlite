@@ -36,6 +36,7 @@ public class SQLEntityProcessor implements EntityProcessor {
 		JdbcTemplate jdbcTemplate = getJdbcTempate(sqlDataSource);
 		jdbcTemplate.query(fieldSetDefinition.getQuery(), new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
+				logger.debug("columns received"+rs.getMetaData().getColumnCount());
 				Map<FieldDefinition, String> valueByIndexName = Maps.newHashMap();
 				for (String fieldName : fieldName2DataSourceMap.keySet()) {
 					String fieldValue = rs.getString(fieldName2DataSourceMap.get(fieldName));
@@ -60,7 +61,8 @@ public class SQLEntityProcessor implements EntityProcessor {
 			jdbcTemplate = new JdbcTemplate(dataSource);
 
 		} catch (ClassNotFoundException e) {
-			logger.error("Exception occurred while getting connection" + e);
+		        logger.error("Exception occurred while getting connection" + e);
+		        throw new RuntimeException(e.getMessage(), e.getCause());
 		}
 		return jdbcTemplate;
 	}
