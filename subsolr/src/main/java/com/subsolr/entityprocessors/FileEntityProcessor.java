@@ -8,7 +8,6 @@ import com.subsolr.entityprocessors.model.Record;
 public class FileEntityProcessor implements EntityProcessor {
 	
 
-	@Override
 	public List<Record> getRecords(FieldSetDefinition fieldSetDefinition) {
 		return null;
 	}

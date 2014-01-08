@@ -6,17 +6,17 @@ import com.subsolr.contextprocessor.model.FieldDefinition;
 
 public class Record {
 	
-	private Map<FieldDefinition,String> valueByIndexName;
+	private Map<String,String> valueByIndexName;
 
-	public Record(Map<FieldDefinition, String> valueByIndexName) {
+	public Record(Map<String, String> valueByIndexName) {
 		this.valueByIndexName = valueByIndexName;
 	}
 
-	public Map<FieldDefinition, String> getValueByIndexName() {
+	public Map<String, String> getValueByIndexName() {
 		return valueByIndexName;
 	}
 
-	public void setValueByIndexName(Map<FieldDefinition,String> valueByIndexName) {
+	public void setValueByIndexName(Map<String,String> valueByIndexName) {
 		this.valueByIndexName = valueByIndexName;
 	}
 

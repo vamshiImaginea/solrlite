@@ -13,9 +13,9 @@
 			<filter class="porterstem" />
 		</analyzer>
 	</field_type>
-
+ 
 	<!-- type for spanish text -->
-	<field_type name="text_esp" class="org.apache.solr.schema.TextField"
+	 <field_type name="text_esp" class="org.apache.solr.schema.TextField"
 		positionIncrementGap="100">
 		<analyzer>
 			<tokenizer
@@ -28,15 +28,15 @@
 	</field_type>
 
 	<field_type name="txt_esp_default" class="org.apache.solr.schema.TextField">
-		<analyzer class="org.apache.lucene.analysis.el.SpanishAnalyzer" />
+		<analyzer class="org.apache.lucene.analysis.es.SpanishAnalyzer" />
 	</field_type>
 	<field_type name="txt_en_default" class="org.apache.solr.schema.TextField">
 		<analyzer class="org.apache.lucene.analysis.en.EnglishAnalyzer" />
-	</field_type>
+	</field_type> 
 
-	<field_type name="numericLong" class="org.apache.solr.schema.TrieIntField" />
+	<field_type name="numericLong" class="org.apache.solr.schema.TrieLongField" precisionStep="8" />
 	<field_type name="date" class="org.apache.solr.schema.TrieDateField" />
-	<field_type name="numericInt" class="org.apache.solr.schema.TrieLongField" />
+	<field_type name="numericInt" class="org.apache.solr.schema.TrieIntField" precisionStep="8"/>
 
 
 	<!-- field definitions here -->
@@ -55,13 +55,13 @@
 	<field name="PFN_s" type="text_esp" indexed="true" stored="true"
 		required="true" multiValued="false" />
 
-	<field name="EMP_ID" type="numeric" indexed="true" stored="true"
-		required="true" multiValued="false" />
+	<field name="EMP_ID" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false"/>
 	<field name="EMP_NAME" type="text_en" indexed="true" stored="true"
 		required="true" multiValued="false" />
 	<field name="EMP_GENDER" type="text_en" indexed="true" stored="true"
 		required="true" multiValued="false" />
-	<field name="EMP_HIRE_DATE" type="date" indexed="true" stored="true"
+	<field name="EMP_HIRE_DATE" type="text_en" indexed="true" stored="true"
 		required="true" multiValued="false" />
 
 
