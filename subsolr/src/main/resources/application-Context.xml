@@ -34,9 +34,10 @@
 		factory-method="newInstance" />
 	<bean id="xPath" factory-bean="xPathFactory" factory-method="newXPath" />
      <bean id="indexBuilder" class="com.subsolr.index.IndexBuilder">
-    
-		<constructor-arg index="0" value="." />
+		<constructor-arg index="0" value="${indexDilesDirectory}" />
 		<constructor-arg index="1" ref="documentContextProcessor" />
+		<constructor-arg index="2" ref="fieldContextProcessor" />
+		
      </bean>
 
 </beans>

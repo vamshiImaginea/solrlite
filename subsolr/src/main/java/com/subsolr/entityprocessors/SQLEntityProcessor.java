@@ -13,34 +13,30 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.subsolr.contextprocessor.FieldContextProcessor;
-import com.subsolr.contextprocessor.model.FieldDefinition;
 import com.subsolr.contextprocessor.model.FieldSetDefinition;
 import com.subsolr.entityprocessors.datasources.SQLDataSource;
 import com.subsolr.entityprocessors.model.Record;
 
 public class SQLEntityProcessor implements EntityProcessor {
 
-	private FieldContextProcessor fieldContextProcessor;
 
-	public SQLEntityProcessor(FieldContextProcessor fieldContextProcessor) {
-		this.fieldContextProcessor = fieldContextProcessor;
-	}
+	public SQLEntityProcessor() {}
+		
 
 	public static final Logger logger = LoggerFactory.getLogger(SQLEntityProcessor.class);
 
 	public List<Record> getRecords(FieldSetDefinition fieldSetDefinition) {
 		SQLDataSource sqlDataSource = (SQLDataSource) fieldSetDefinition.getDataSource();
 		final List<Record> records = Lists.newArrayList();
-		final Map<String, String> fieldName2DataSourceMap = fieldSetDefinition.getFieldNameToEntityNameMap();
+		final Map<String, String> fieldNameToEntityNameMap = fieldSetDefinition.getFieldNameToEntityNameMap();
 		JdbcTemplate jdbcTemplate = getJdbcTempate(sqlDataSource);
 		jdbcTemplate.query(fieldSetDefinition.getQuery(), new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
 				logger.debug("columns received"+rs.getMetaData().getColumnCount());
-				Map<FieldDefinition, String> valueByIndexName = Maps.newHashMap();
-				for (String fieldName : fieldName2DataSourceMap.keySet()) {
-					String fieldValue = rs.getString(fieldName2DataSourceMap.get(fieldName));
-					valueByIndexName.put(fieldContextProcessor.getFieldDefinitionsByName(fieldName), fieldValue);
+				Map<String, String> valueByIndexName = Maps.newHashMap();
+				for (String fieldName : fieldNameToEntityNameMap.keySet()) {
+					String fieldValue = rs.getString(fieldNameToEntityNameMap.get(fieldName));
+					valueByIndexName.put(fieldName, fieldValue);
 				}
 				records.add(new Record(valueByIndexName));
 			}
@@ -66,13 +62,8 @@ public class SQLEntityProcessor implements EntityProcessor {
 		return jdbcTemplate;
 	}
 
-	public FieldContextProcessor getFieldContextProcessor() {
-		return fieldContextProcessor;
-	}
 
-	public void setFieldContextProcessor(FieldContextProcessor fieldContextProcessor) {
-		this.fieldContextProcessor = fieldContextProcessor;
-	}
+	
 	
 
 }

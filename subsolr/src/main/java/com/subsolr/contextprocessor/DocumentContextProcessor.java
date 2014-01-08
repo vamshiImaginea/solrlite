@@ -111,7 +111,7 @@ public class DocumentContextProcessor implements InitializingBean {
 			String entityProcessorClass = getAttributeValueInNode(fieldSetNode, "EntityProcessor");
 			fieldSetDefinition.setDataSource(sqlDataSourceByName.get(sourceId));
 			Class<? extends EntityProcessor> entityProcessor = (Class<? extends EntityProcessor>) Class.forName(entityProcessorClass);
-			fieldSetDefinition.setEntityProcessor(entityProcessor.getConstructor(FieldContextProcessor.class).newInstance(fieldContextProcessor));
+			fieldSetDefinition.setEntityProcessor(entityProcessor.newInstance());
 			Node queryNode = (Node) xPath.evaluate("./query/statement", fieldSetNode, XPathConstants.NODE);
 			fieldSetDefinition.setQuery(queryNode.getTextContent());
 			NodeList fieldMappingNodes = (NodeList) xPath.evaluate("./field", fieldSetNode, XPathConstants.NODESET);

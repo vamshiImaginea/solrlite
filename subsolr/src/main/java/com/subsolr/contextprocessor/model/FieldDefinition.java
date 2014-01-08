@@ -1,39 +1,31 @@
 package com.subsolr.contextprocessor.model;
 
+import java.util.Map;
+
 public class FieldDefinition {
 
 	String fieldName;
 	FieldTypeDefinition fieldTypeDefinition;
-	boolean indexed;
-	boolean stored;
-	boolean analyzed;
-	boolean mandatory;
+	Map<String, String> fieldProperties;
 
-	public FieldDefinition(String fieldName, FieldTypeDefinition fieldTypeDefinition, boolean indexed, boolean stored, boolean analyzed, boolean mandatory) {
+	public FieldDefinition(String fieldName, FieldTypeDefinition fieldTypeDefinition, Map<String, String> fieldProperties) {
 		this.fieldName = fieldName;
 		this.fieldTypeDefinition = fieldTypeDefinition;
-		this.indexed = indexed;
-		this.stored = stored;
-		this.analyzed = analyzed;
-		this.mandatory = mandatory;
+		this.fieldProperties = fieldProperties;
+
 	}
 
 	public FieldDefinition(FieldDefinitionBuilder fieldDefinitionBuilder) {
 		this.fieldName = fieldDefinitionBuilder.fieldName;
 		this.fieldTypeDefinition = fieldDefinitionBuilder.fieldTypeDefinition;
-		this.indexed = fieldDefinitionBuilder.indexed;
-		this.stored = fieldDefinitionBuilder.stored;
-		this.analyzed = fieldDefinitionBuilder.analyzed;
-		this.mandatory = fieldDefinitionBuilder.mandatory;
+		this.fieldProperties = fieldDefinitionBuilder.fieldProperties;
+
 	}
 
 	public static class FieldDefinitionBuilder {
+		public Map<String, String> fieldProperties;
 		String fieldName;
 		FieldTypeDefinition fieldTypeDefinition;
-		boolean indexed = true;
-		boolean stored = true;
-		boolean analyzed = false;
-		boolean mandatory = true;
 
 		public FieldDefinitionBuilder fieldName(String value) {
 			this.fieldName = value;
@@ -45,22 +37,8 @@ public class FieldDefinition {
 			return this;
 		}
 
-		public FieldDefinitionBuilder stored(boolean value) {
-			this.stored = value;
-			return this;
-		}
-
-		public FieldDefinitionBuilder analyzed(boolean value) {
-			this.analyzed = value;
-			return this;
-		}
-
-		public FieldDefinitionBuilder mandatory(boolean value) {
-			this.mandatory = value;
-			return this;
-		}
-		public FieldDefinitionBuilder indexed(boolean value) {
-			this.indexed = value;
+		public FieldDefinitionBuilder properties(Map<String, String> value) {
+			this.fieldProperties = value;
 			return this;
 		}
 
@@ -69,7 +47,7 @@ public class FieldDefinition {
 		}
 
 	}
-	
+
 	public String getFieldName() {
 		return fieldName;
 	}
@@ -78,20 +56,8 @@ public class FieldDefinition {
 		return fieldTypeDefinition;
 	}
 
-	public boolean isIndexed() {
-		return indexed;
-	}
-
-	public boolean isStored() {
-		return stored;
-	}
-
-	public boolean isAnalyzed() {
-		return analyzed;
-	}
-
-	public boolean isMandatory() {
-		return mandatory;
+	public Map<String, String> getFieldProperties() {
+		return fieldProperties;
 	}
 
 }

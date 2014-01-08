@@ -1,7 +1,7 @@
 package com.subsolr.contextprocessor;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -9,14 +9,17 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.util.CharFilterFactory;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.analysis.util.TokenizerFactory;
-import org.apache.lucene.document.Field;
 import org.apache.lucene.search.similarities.Similarity;
+import org.apache.lucene.util.Version;
 import org.apache.solr.analysis.SolrAnalyzer;
 import org.apache.solr.analysis.TokenizerChain;
 import org.apache.solr.schema.FieldType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.w3c.dom.Document;
@@ -24,6 +27,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.subsolr.contextprocessor.model.FieldDefinition;
 import com.subsolr.contextprocessor.model.FieldTypeDefinition;
@@ -36,9 +40,10 @@ import com.subsolr.contextprocessor.model.FieldTypeDefinition;
  * 
  */
 public class FieldContextProcessor implements InitializingBean {
-	 private Resource resource;
+	private Resource resource;
 	private DocumentBuilder documentBuilder;
 	private XPath xPath;
+	public static final Logger logger = LoggerFactory.getLogger(FieldContextProcessor.class);
 
 	public FieldContextProcessor(Resource resource, DocumentBuilder documentBuilder, XPath xPath) {
 		this.resource = resource;
@@ -50,8 +55,7 @@ public class FieldContextProcessor implements InitializingBean {
 		return fieldTypeDefinitionsByName;
 	}
 
-	public void setFieldTypeDefinitionsByName(
-			Map<String, FieldTypeDefinition> fieldTypeDefinitionsByName) {
+	public void setFieldTypeDefinitionsByName(Map<String, FieldTypeDefinition> fieldTypeDefinitionsByName) {
 		this.fieldTypeDefinitionsByName = fieldTypeDefinitionsByName;
 	}
 
@@ -59,33 +63,69 @@ public class FieldContextProcessor implements InitializingBean {
 		return fieldDefinitionsByName.get(name);
 	}
 
-	public void setFieldDefinitionsByName(
-			Map<String, FieldDefinition> fieldDefinitionsByName) {
+	public void setFieldDefinitionsByName(Map<String, FieldDefinition> fieldDefinitionsByName) {
 		this.fieldDefinitionsByName = fieldDefinitionsByName;
 	}
 
 	private Map<String, FieldTypeDefinition> fieldTypeDefinitionsByName;
 	private Map<String, FieldDefinition> fieldDefinitionsByName;
 
-	private void setFieldTypeDefinitions(NodeList fieldTypeDefinitionNodes) throws XPathExpressionException, InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private void setFieldTypeDefinitions(NodeList fieldTypeDefinitionNodes) throws XPathExpressionException, InstantiationException, IllegalAccessException, ClassNotFoundException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		fieldTypeDefinitionsByName = Maps.<String, FieldTypeDefinition> newHashMap();
 		int noOfFieldTypeDefinitons = fieldTypeDefinitionNodes.getLength();
 		for (int i = 0; i < noOfFieldTypeDefinitons; i++) {
 			Node fieldTypeDefinitionNode = fieldTypeDefinitionNodes.item(i);
-			Node similarityNode = (Node) xPath.evaluate("./similarity", fieldTypeDefinitionNode, XPathConstants.NODE);
-			Node analyzerNode = (Node) xPath.evaluate("./analyzer", fieldTypeDefinitionNode, XPathConstants.NODE);
-
 			String fieldTypeName = getAttributeValueInNode(fieldTypeDefinitionNode, "name");
-			Class<? extends FieldType> fieldTypeClass= (Class<? extends FieldType>) Class.forName(getAttributeValueInNode(fieldTypeDefinitionNode, "class"));	
-			FieldTypeDefinition fieldTypeDefinition = 
-					new FieldTypeDefinition(fieldTypeName,fieldTypeClass, Integer.valueOf(getAttributeValueInNode(fieldTypeDefinitionNode, "positionIncrementGap")), Similarity.class.cast(Class.forName(getAttributeValueInNode(similarityNode, "class")).newInstance()), getAnalyzer(analyzerNode));
+			logger.debug(String.format("processing field type name %s in fieldTypeDefNode %s", fieldTypeName, fieldTypeDefinitionNode.getNodeName()));
+			Node similarityNode = (Node) xPath.evaluate("./similarity", fieldTypeDefinitionNode, XPathConstants.NODE);
+			NodeList analyzerNodeList = (NodeList) xPath.evaluate("./analyzer", fieldTypeDefinitionNode, XPathConstants.NODESET);
+			Class<? extends FieldType> fieldTypeClass = (Class<? extends FieldType>) Class.forName(getAttributeValueInNode(fieldTypeDefinitionNode, "class"));
+			String positionIncrementGap = getPositionIncrementGap(fieldTypeDefinitionNode);
+			FieldTypeDefinition fieldTypeDefinition = new FieldTypeDefinition();
+			fieldTypeDefinition.setName(fieldTypeName);
+			fieldTypeDefinition.setFieldTypeClassName(fieldTypeClass);
+			if (null != positionIncrementGap) {
+				fieldTypeDefinition.setPositionIncrementGap(Integer.valueOf(positionIncrementGap));
+			}
+			if (null != similarityNode) {
+				fieldTypeDefinition.setSimilarityClassName(Similarity.class.cast(Class.forName(getAttributeValueInNode(similarityNode, "class")).newInstance()));
+			}
+			if (null != analyzerNodeList) {
+				fieldTypeDefinition.setAnalyzer(getAnalyzers(analyzerNodeList));
+			}
+
 			fieldTypeDefinitionsByName.put(fieldTypeName, fieldTypeDefinition);
 
 		}
 
 	}
 
-	private SolrAnalyzer getAnalyzer(Node analyzerNode) throws XPathExpressionException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+	private List<Analyzer> getAnalyzers(NodeList analyzerNodeList) throws XPathExpressionException, IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
+		List<Analyzer> analyzers = Lists.newArrayList();
+		int noOfAnalyzers = analyzerNodeList.getLength();
+		for (int i = 0; i < noOfAnalyzers; i++) {
+			Node analyzerNode = analyzerNodeList.item(i);
+			String simpleAnalyzerClass = getAttributeValueInNode(analyzerNode, "class");
+			if (null != simpleAnalyzerClass) {
+				analyzers.add(getSimpleAnalyzer(simpleAnalyzerClass));
+			}else{
+				analyzers.add(getAnalyzer(analyzerNode));
+			}
+		}
+		return analyzers;
+	}
+
+	private Analyzer getSimpleAnalyzer(String simpleAnalyzerClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
+		return (Analyzer) Class.forName(simpleAnalyzerClass).getConstructor(Version.class).newInstance(Version.LUCENE_CURRENT);
+	}
+
+	private String getPositionIncrementGap(Node fieldTypeDefinitionNode) {
+		return getAttributeValueInNode(fieldTypeDefinitionNode, "positionIncrementGap");
+	}
+
+	private Analyzer getAnalyzer(Node analyzerNode) throws XPathExpressionException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException, ClassNotFoundException {
 		Node tokenizerNode = (Node) xPath.evaluate("./tokenizer", analyzerNode, XPathConstants.NODE);
 		NodeList filterNodes = (NodeList) xPath.evaluate("./filter", analyzerNode, XPathConstants.NODESET);
 
@@ -122,25 +162,37 @@ public class FieldContextProcessor implements InitializingBean {
 	private void setFieldDefinitions(NodeList fieldDefinitionNodes) {
 		fieldDefinitionsByName = Maps.<String, FieldDefinition> newHashMap();
 		int noOfFieldDefinitonSets = fieldDefinitionNodes.getLength();
-		
-		
+
 		for (int i = 0; i < noOfFieldDefinitonSets; i++) {
 			Node fieldDefinitionNode = fieldDefinitionNodes.item(i);
 			String fieldName = getAttributeValueInNode(fieldDefinitionNode, "name");
-			FieldDefinition fieldDefinition = new FieldDefinition.FieldDefinitionBuilder().fieldName(fieldName).fieldTypeDefinition(fieldTypeDefinitionsByName.get(getAttributeValueInNode(fieldDefinitionNode, "type"))).analyzed(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "analyzed"))).stored(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "stored"))).indexed(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "indexed"))).mandatory(Boolean.valueOf(getAttributeValueInNode(fieldDefinitionNode, "required"))).build();
+			logger.debug(String.format("processing field name %s in fieldDefNode %s", fieldName, fieldDefinitionNode.getNodeName()));
+			Map<String, String> fieldPropeties = toMap(fieldDefinitionNode.getAttributes());
+			fieldPropeties.remove("name");
+			fieldPropeties.remove("type");
+			fieldPropeties.remove("luceneMatchVersion");
+
+			FieldDefinition fieldDefinition = new FieldDefinition.FieldDefinitionBuilder().fieldName(fieldName)
+					.fieldTypeDefinition(fieldTypeDefinitionsByName.get(getAttributeValueInNode(fieldDefinitionNode, "type")))
+					.properties(fieldPropeties).build();
 			fieldDefinitionsByName.put(fieldName, fieldDefinition);
 		}
 
 	}
 
 	private String getAttributeValueInNode(Node fieldDefinitionNode, String attributeName) {
-		return fieldDefinitionNode.getAttributes().getNamedItem(attributeName).getNodeValue();
+		logger.debug(String.format("looking for attribute name %s in fieldDefNode %s", attributeName, fieldDefinitionNode.getNodeName()));
+		Node attributeNode = fieldDefinitionNode.getAttributes().getNamedItem(attributeName);
+		logger.debug("attributeNode " + attributeNode);
+		String attributeValue = null == attributeNode ? null : attributeNode.getNodeValue();
+		logger.debug("attributeValue " + attributeValue);
+		return attributeValue;
 	}
 
 	public void afterPropertiesSet() throws Exception {
 		Document fieldConfigDocument = documentBuilder.parse(resource.getFile());
-		setFieldTypeDefinitions(fieldConfigDocument.getElementsByTagName("field_type") );
-		setFieldDefinitions(fieldConfigDocument.getElementsByTagName("field") );
+		setFieldTypeDefinitions(fieldConfigDocument.getElementsByTagName("field_type"));
+		setFieldDefinitions(fieldConfigDocument.getElementsByTagName("field"));
 	}
 
 }
