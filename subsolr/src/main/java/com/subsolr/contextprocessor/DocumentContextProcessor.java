@@ -101,6 +101,8 @@ public class DocumentContextProcessor implements InitializingBean {
 			ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
 		int noOfFieldSetsInDoc = fieldsetDefinitionNodeList.getLength();
 		Map<String,FieldSetDefinition> fieldSetsByName = Maps.newHashMap();
+		Map<String,String> propertiesForEntityProcessor = Maps.newHashMap();
+
 		for (int i = 0; i < noOfFieldSetsInDoc; i++) {
 			FieldSetDefinition fieldSetDefinition = new FieldSetDefinition();
 			Node fieldSetNode = fieldsetDefinitionNodeList.item(i);
@@ -111,9 +113,15 @@ public class DocumentContextProcessor implements InitializingBean {
 			Class<? extends EntityProcessor> entityProcessor = (Class<? extends EntityProcessor>) Class.forName(entityProcessorClass);
 			fieldSetDefinition.setEntityProcessor(entityProcessor.newInstance());
 			Node queryNode = (Node) xPath.evaluate("./query/statement", fieldSetNode, XPathConstants.NODE);
+			Node fileNode =  (Node) xPath.evaluate("./fileName", fieldSetNode, XPathConstants.NODE); 
 			if(null!= queryNode){
-			fieldSetDefinition.setQuery(queryNode.getTextContent());
+			 propertiesForEntityProcessor.put("SQLQuery", queryNode.getTextContent());
 			}
+			if(null!= fileNode){
+			 propertiesForEntityProcessor.put("File", fileNode.getTextContent());
+			}
+			fieldSetDefinition.setPropertiesForEntityProcessor(propertiesForEntityProcessor);
+
 			NodeList fieldMappingNodes = (NodeList) xPath.evaluate("./field", fieldSetNode, XPathConstants.NODESET);
 			Map<String, String> fieldToColumnMapping = extractFieldMappings(fieldMappingNodes);
 		    fieldSetDefinition.setFieldNameToEntityNameMap(fieldToColumnMapping);

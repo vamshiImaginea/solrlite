@@ -19,10 +19,6 @@ import com.subsolr.entityprocessors.model.Record;
 
 public class SQLEntityProcessor implements EntityProcessor {
 
-
-	public SQLEntityProcessor() {}
-		
-
 	public static final Logger logger = LoggerFactory.getLogger(SQLEntityProcessor.class);
 
 	public List<Record> getRecords(FieldSetDefinition fieldSetDefinition) {
@@ -30,7 +26,7 @@ public class SQLEntityProcessor implements EntityProcessor {
 		final List<Record> records = Lists.newArrayList();
 		final Map<String, String> fieldNameToEntityNameMap = fieldSetDefinition.getFieldNameToEntityNameMap();
 		JdbcTemplate jdbcTemplate = getJdbcTempate(sqlDataSource);
-		jdbcTemplate.query(fieldSetDefinition.getQuery(), new RowCallbackHandler() {
+		jdbcTemplate.query(fieldSetDefinition.getPropertiesForEntityProcessor().get("SQLQuery"), new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
 				logger.debug("columns received"+rs.getMetaData().getColumnCount());
 				Map<String, String> valueByIndexName = Maps.newHashMap();
