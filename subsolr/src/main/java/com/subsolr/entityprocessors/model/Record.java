@@ -2,8 +2,6 @@ package com.subsolr.entityprocessors.model;
 
 import java.util.Map;
 
-import com.subsolr.contextprocessor.model.FieldDefinition;
-
 public class Record {
 	
 	private Map<String,String> valueByIndexName;

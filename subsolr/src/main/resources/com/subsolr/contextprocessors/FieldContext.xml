@@ -55,7 +55,7 @@
 	<field name="PFN_s" type="text_esp" indexed="true" stored="true"
 		required="true" multiValued="false" />
 
-	<field name="EMP_ID" type="text_en" indexed="true" stored="true"
+	<field name="EMP_ID" type="numericInt" indexed="true" stored="true"
 		required="true" multiValued="false"/>
 	<field name="EMP_NAME" type="text_en" indexed="true" stored="true"
 		required="true" multiValued="false" />

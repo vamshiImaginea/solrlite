@@ -15,7 +15,6 @@ import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.analysis.util.TokenizerFactory;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.util.Version;
-import org.apache.solr.analysis.SolrAnalyzer;
 import org.apache.solr.analysis.TokenizerChain;
 import org.apache.solr.schema.FieldType;
 import org.slf4j.Logger;
@@ -43,12 +42,14 @@ public class FieldContextProcessor implements InitializingBean {
 	private Resource resource;
 	private DocumentBuilder documentBuilder;
 	private XPath xPath;
+	private String luceneVersion;
 	public static final Logger logger = LoggerFactory.getLogger(FieldContextProcessor.class);
 
-	public FieldContextProcessor(Resource resource, DocumentBuilder documentBuilder, XPath xPath) {
+	public FieldContextProcessor(Resource resource, DocumentBuilder documentBuilder, XPath xPath,String luceneVersion) {
 		this.resource = resource;
 		this.documentBuilder = documentBuilder;
 		this.xPath = xPath;
+		this.luceneVersion =luceneVersion;
 	}
 
 	public Map<String, FieldTypeDefinition> getFieldTypeDefinitionsByName() {
@@ -152,7 +153,7 @@ public class FieldContextProcessor implements InitializingBean {
 	private Map<String, String> toMap(NamedNodeMap attributes) {
 		int noOfAttributes = attributes.getLength();
 		Map<String, String> attributesMap = Maps.<String, String> newHashMap();
-		attributesMap.put("luceneMatchVersion", "LUCENE_CURRENT");
+		attributesMap.put("luceneMatchVersion", luceneVersion);
 		for (int i = 0; i < noOfAttributes; i++) {
 			attributesMap.put(attributes.item(i).getNodeName(), attributes.item(i).getNodeValue());
 		}

@@ -15,6 +15,8 @@
 			value="classpath:/com/subsolr/contextprocessors/FieldContext.xml" />
 		<constructor-arg index="1" ref="documentBuilder" />
 		<constructor-arg index="2" ref="xPath" />
+	    <constructor-arg index="3" value="${lucene.version}" />
+		
 
 	</bean>
 
@@ -24,6 +26,7 @@
 		<constructor-arg index="1" ref="fieldContextProcessor" />
 		<constructor-arg index="2" ref="xPath" />
 		<constructor-arg index="3" ref="documentBuilder" />
+		
 	</bean>
 
 	<bean id="documentBuilderFactory" class="javax.xml.parsers.DocumentBuilderFactory"
@@ -34,9 +37,10 @@
 		factory-method="newInstance" />
 	<bean id="xPath" factory-bean="xPathFactory" factory-method="newXPath" />
      <bean id="indexBuilder" class="com.subsolr.index.IndexBuilder">
-		<constructor-arg index="0" value="${indexDilesDirectory}" />
-		<constructor-arg index="1" ref="documentContextProcessor" />
-		<constructor-arg index="2" ref="fieldContextProcessor" />
+        <constructor-arg index="0" value="${lucene.version}" />
+		<constructor-arg index="1" value="${indexDilesDirectory}" />
+		<constructor-arg index="2" ref="documentContextProcessor" />
+		<constructor-arg index="3" ref="fieldContextProcessor" />
 		
      </bean>
 
