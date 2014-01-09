@@ -8,12 +8,15 @@
 		<driver>com.mysql.jdbc.Driver</driver>
 	</SQLdatasource>
 
-	<Filedatasource id="ds2">
+	<FtpDataSource id="ds2">
 		<host>xxxx</host>
 		<userid> xxxx</userid>
 		<password>yyyy</password>
-		<type>JSON</type>
-	</Filedatasource>
+	</FtpDataSource>
+	
+	<FileDataSource id="ds3">
+		<path>local_path</path>
+	</FileDataSource>
 
 	<!-- configure documents here -->
 	<document name="ProcedureDocument">
@@ -36,10 +39,18 @@
 				<max_cached_results> 10000 </max_cached_results>
 			</query>
 		</fieldset>
-		<!-- <fieldset name="key_word" sourceId="ds1"
-			EntityProcessor="com.subsolr.entityprocessors.FileEntityProcessor">
-			for key words
+		 <fieldset name="key_word" sourceId="ds1"
+			EntityProcessor="com.subsolr.entityprocessors.CSVEntityProcessor">
+			
+			<field column_name="EMP_ID" field_map_name="1" />
+			<field column_name="EMP_NAME" field_map_name="2" />
+			<field column_name="EMP_GENDER" field_map_name="3" />
+			<field column_name="EMP_HIRE_DATE" field_map_name="4" />
+			
+			<fileName></fileName>
+
 		</fieldset>
+		<!--
 		<fieldset name="procedure_family">
 			for procedure family info
 		</fieldset> -->
