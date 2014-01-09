@@ -9,8 +9,6 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.subsolr.contextprocessor.FieldContextProcessor;
-import com.subsolr.contextprocessor.model.FieldDefinition;
 import com.subsolr.contextprocessor.model.FieldSetDefinition;
 import com.subsolr.entityprocessors.datasources.FileDataSource;
 import com.subsolr.entityprocessors.model.Record;
@@ -25,7 +23,7 @@ public class CSVEntityProcessor implements EntityProcessor {
         FileDataSource fileDataSource = (FileDataSource) fieldSetDefinition.getDataSource();
         Map<String, String> fieldNameToEntityNameMap = fieldSetDefinition.getFieldNameToEntityNameMap();
 
-        String fileName = null; // TODO to get from properties in fieldSetDef.
+        String fileName = fieldSetDefinition.getPropertiesForEntityProcessor().get("File"); // TODO to get from properties in fieldSetDef.
         validateFile(fileName);
         Reader reader = fileDataSource.getFileReader(fileName );
 

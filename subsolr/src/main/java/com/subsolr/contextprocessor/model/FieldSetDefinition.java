@@ -10,8 +10,7 @@ public class FieldSetDefinition {
 	private Map<String, String> fieldNameToEntityNameMap;
 	private DataSource dataSource;
 	private EntityProcessor entityProcessor;
-	private String query; // TODO generalize for all field set definitions ...
-							// properties ??
+	private Map<String,String> propertiesForEntityProcessor;
 
 	public DataSource getDataSource() {
 		return dataSource;
@@ -28,15 +27,7 @@ public class FieldSetDefinition {
 	public void setEntityProcessor(EntityProcessor entityProcessor) {
 		this.entityProcessor = entityProcessor;
 	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
-
+	
 	public Map<String, String> getFieldNameToEntityNameMap() {
 		return fieldNameToEntityNameMap;
 	}
@@ -44,5 +35,15 @@ public class FieldSetDefinition {
 	public void setFieldNameToEntityNameMap(Map<String, String> fieldNameToEntityNameMap) {
 		this.fieldNameToEntityNameMap = fieldNameToEntityNameMap;
 	}
+
+	public Map<String,String> getPropertiesForEntityProcessor() {
+		return propertiesForEntityProcessor;
+	}
+
+	public void setPropertiesForEntityProcessor(Map<String,String> propertiesForEntityProcessor) {
+		this.propertiesForEntityProcessor = propertiesForEntityProcessor;
+	}
+
+	
 
 }
