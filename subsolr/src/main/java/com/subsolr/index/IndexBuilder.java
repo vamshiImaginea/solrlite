@@ -84,7 +84,7 @@ public class IndexBuilder implements InitializingBean {
 				if (analyzer.size() != 0) {
 					fieldType.setAnalyzer(analyzer.get(0));
 				}
-				// fieldType.setSimilarity(fieldDefinition.getFieldTypeDefinition().getSimilarityClassName());//TODO
+				//fieldType.setSimilarity(fieldDefinition.getFieldTypeDefinition().getSimilarityClassName());//TODO
 				// Similarity
 				SchemaField schemaField = new SchemaField(fieldDefinition.getFieldName(), fieldType, calcProps(fieldDefinition.getFieldName(), fieldType, fieldDefinition.getFieldProperties()), "");
 				IndexableField field = schemaField.createField(fieldDefEntry.getValue(), 1.0f);

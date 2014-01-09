@@ -23,9 +23,8 @@
 	<bean id="documentContextProcessor" class="com.subsolr.contextprocessor.DocumentContextProcessor">
 		<constructor-arg index="0"
 			value="classpath:/com/subsolr/contextprocessors/DocumentContext.xml" />
-		<constructor-arg index="1" ref="fieldContextProcessor" />
-		<constructor-arg index="2" ref="xPath" />
-		<constructor-arg index="3" ref="documentBuilder" />
+		<constructor-arg index="1" ref="xPath" />
+		<constructor-arg index="2" ref="documentBuilder" />
 		
 	</bean>
 

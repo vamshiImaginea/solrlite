@@ -19,11 +19,7 @@ public class CSVEntityProcessor implements EntityProcessor {
 
     private static final String CSV_EXTENSION = "csv";
     
-    private FieldContextProcessor fieldContextProcessor;
 
-    public CSVEntityProcessor(FieldContextProcessor fieldContextProcessor) {
-        this.fieldContextProcessor = fieldContextProcessor;
-    }
 
     public List<Record> getRecords(FieldSetDefinition fieldSetDefinition) {
         FileDataSource fileDataSource = (FileDataSource) fieldSetDefinition.getDataSource();
@@ -37,10 +33,10 @@ public class CSVEntityProcessor implements EntityProcessor {
 
         List<Record> records = Lists.newArrayList();
         for (String[] line : lines) {
-            Map<FieldDefinition, String> valueByIndexName = Maps.newHashMap();
+            Map<String, String> valueByIndexName = Maps.newHashMap();
             for (String fieldName : fieldNameToEntityNameMap.keySet()) {
                 String fieldValue = line[Integer.parseInt(fieldNameToEntityNameMap.get(fieldName))];
-                valueByIndexName.put(fieldContextProcessor.getFieldDefinitionsByName(fieldName), fieldValue);
+                valueByIndexName.put(fieldName, fieldValue);
             }
             records.add(new Record(valueByIndexName));
         }
@@ -80,12 +76,6 @@ public class CSVEntityProcessor implements EntityProcessor {
         }
     }
 
-    public FieldContextProcessor getFieldContextProcessor() {
-        return fieldContextProcessor;
-    }
-
-    public void setFieldContextProcessor(FieldContextProcessor fieldContextProcessor) {
-        this.fieldContextProcessor = fieldContextProcessor;
-    }
+   
 
 }
