@@ -40,7 +40,7 @@
 
 	<!-- field definitions here -->
 	<field name="PMN" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" />
+		required="true" multiValued="false"  />
 	<field name="PMN_s" type="text_esp" indexed="true" stored="true"
 		required="true" multiValued="false" />
 	<field name="PMI " type="numeric" indexed="true" stored="true"
@@ -55,12 +55,12 @@
 		required="true" multiValued="false" />
 
 	<field name="EMP_ID" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false"/>
+		required="true" multiValued="false" tokenized="true"/>
 	<field name="EMP_NAME" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" />
+		required="true" multiValued="false" tokenized="true"/>
 	<field name="EMP_GENDER" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" />
+		required="true" multiValued="false" tokenized="true"/>
 	<field name="EMP_HIRE_DATE" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" />
+		required="true" multiValued="false" tokenized="true"/>
 
 </schema>

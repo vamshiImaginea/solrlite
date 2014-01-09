@@ -83,6 +83,7 @@ public class IndexBuilder implements InitializingBean {
 				List<Analyzer> analyzer = fieldDefinition.getFieldTypeDefinition().getAnalyzer();
 				if (analyzer.size() != 0) {
 					fieldType.setAnalyzer(analyzer.get(0));
+					fieldType.setIsExplicitAnalyzer(true);
 				}
 				//fieldType.setSimilarity(fieldDefinition.getFieldTypeDefinition().getSimilarityClassName());//TODO
 				// Similarity
@@ -92,6 +93,7 @@ public class IndexBuilder implements InitializingBean {
 
 			}
 			writer.addDocument(doc);
+			writer.commit();
 			logger.debug("processing done for  documentName -  " + documentName);
 
 		}
@@ -211,7 +213,7 @@ public class IndexBuilder implements InitializingBean {
 	private IndexWriter getIndexWriterForDocument(boolean b, String documentName) throws IOException {
 
 		StandardAnalyzer analyzer = new StandardAnalyzer(luceneVersion);
-		Directory index = FSDirectory.open(new File(luceneDirectory + File.pathSeparator + documentName));
+		Directory index = FSDirectory.open(new File(luceneDirectory + File.separator + documentName));
 		IndexWriterConfig config = new IndexWriterConfig(luceneVersion, analyzer);
 		IndexWriter indexWriter = new IndexWriter(index, config);
 
