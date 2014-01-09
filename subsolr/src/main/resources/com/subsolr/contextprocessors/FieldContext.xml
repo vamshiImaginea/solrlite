@@ -38,7 +38,6 @@
 	<field_type name="date" class="org.apache.solr.schema.TrieDateField" />
 	<field_type name="numericInt" class="org.apache.solr.schema.TrieIntField" precisionStep="8"/>
 
-
 	<!-- field definitions here -->
 	<field name="PMN" type="text_en" indexed="true" stored="true"
 		required="true" multiValued="false" />
@@ -63,6 +62,5 @@
 		required="true" multiValued="false" />
 	<field name="EMP_HIRE_DATE" type="text_en" indexed="true" stored="true"
 		required="true" multiValued="false" />
-
 
 </schema>

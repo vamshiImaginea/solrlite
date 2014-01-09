@@ -57,7 +57,8 @@ public class SQLEntityProcessor implements EntityProcessor {
 			jdbcTemplate = new JdbcTemplate(dataSource);
 
 		} catch (ClassNotFoundException e) {
-			logger.error("Exception occurred while getting connection" + e);
+		        logger.error("Exception occurred while getting connection" + e);
+		        throw new RuntimeException(e.getMessage(), e.getCause());
 		}
 		return jdbcTemplate;
 	}
