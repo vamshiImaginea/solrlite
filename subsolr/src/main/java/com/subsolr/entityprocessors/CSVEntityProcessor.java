@@ -23,7 +23,7 @@ public class CSVEntityProcessor implements EntityProcessor {
         FileDataSource fileDataSource = (FileDataSource) fieldSetDefinition.getDataSource();
         Map<String, String> fieldNameToEntityNameMap = fieldSetDefinition.getFieldNameToEntityNameMap();
 
-        String fileName = fieldSetDefinition.getPropertiesForEntityProcessor().get("File"); // TODO to get from properties in fieldSetDef.
+        String fileName = fieldSetDefinition.getPropertiesForEntityProcessor().get("File");
         validateFile(fileName);
         Reader reader = fileDataSource.getFileReader(fileName );
 
@@ -33,7 +33,7 @@ public class CSVEntityProcessor implements EntityProcessor {
         for (String[] line : lines) {
             Map<String, String> valueByIndexName = Maps.newHashMap();
             for (String fieldName : fieldNameToEntityNameMap.keySet()) {
-                String fieldValue = line[Integer.parseInt(fieldNameToEntityNameMap.get(fieldName))];
+                String fieldValue = line[Integer.parseInt(fieldNameToEntityNameMap.get(fieldName))-1];
                 valueByIndexName.put(fieldName, fieldValue);
             }
             records.add(new Record(valueByIndexName));
