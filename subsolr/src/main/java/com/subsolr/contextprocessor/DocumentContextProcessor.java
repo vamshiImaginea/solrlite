@@ -28,15 +28,13 @@ import com.subsolr.entityprocessors.datasources.SQLDataSource;
  */
 public class DocumentContextProcessor implements InitializingBean {
 
-	private final FieldContextProcessor fieldContextProcessor;
 	private final XPath xPath;
 	private final DocumentBuilder documentBuilder;
 	private final Resource resource;
 	private Map<String, DocumentDefinition> documentDefinitionsByName;
 	Map<String, SQLDataSource> sqlDataSourceByName;
 
-	public DocumentContextProcessor(Resource resource, FieldContextProcessor fieldContextProcessor, XPath xPath, DocumentBuilder documentBuilder) {
-		this.fieldContextProcessor = fieldContextProcessor;
+	public DocumentContextProcessor(Resource resource,  XPath xPath, DocumentBuilder documentBuilder) {
 		this.xPath = xPath;
 		this.documentBuilder = documentBuilder;
 		this.resource = resource;
@@ -113,7 +111,9 @@ public class DocumentContextProcessor implements InitializingBean {
 			Class<? extends EntityProcessor> entityProcessor = (Class<? extends EntityProcessor>) Class.forName(entityProcessorClass);
 			fieldSetDefinition.setEntityProcessor(entityProcessor.newInstance());
 			Node queryNode = (Node) xPath.evaluate("./query/statement", fieldSetNode, XPathConstants.NODE);
+			if(null!= queryNode){
 			fieldSetDefinition.setQuery(queryNode.getTextContent());
+			}
 			NodeList fieldMappingNodes = (NodeList) xPath.evaluate("./field", fieldSetNode, XPathConstants.NODESET);
 			Map<String, String> fieldToColumnMapping = extractFieldMappings(fieldMappingNodes);
 		    fieldSetDefinition.setFieldNameToEntityNameMap(fieldToColumnMapping);
