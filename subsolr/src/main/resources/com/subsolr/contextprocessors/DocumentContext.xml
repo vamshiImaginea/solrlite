@@ -13,7 +13,7 @@
 		<userid> xxxx</userid>
 		<password>yyyy</password>
 	</FtpDataSource>
-	
+
 	<FileDataSource id="ds3">
 		<path>local_path</path>
 	</FileDataSource>
@@ -21,39 +21,118 @@
 	<!-- configure documents here -->
 	<document name="ProcedureDocument">
 
-		<fieldset name="procedure" sourceId="ds1" EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
-			<field column_name="EMP_ID" field_map_name="EMP_ID" />
-			<field column_name="EMP_NAME" field_map_name="EMP_NAME" />
-			<field column_name="EMP_GENDER" field_map_name="EMP_GENDER" />
-			<field column_name="EMP_HIRE_DATE" field_map_name="EMP_HIRE_DATE" />
+		<fieldset name="procedure_family" sourceId="ds1"
+			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
+			<field column_name="DEFAULT_PROCEDURE_ID" field_map_name="PROCE" />
+			<field column_name="PM_NAME" field_map_name="EMP_NAME" />
+			<field column_name="PF_ID" field_map_name="EMP_GENDER" />
+			<field column_name="PF_GRP_NAME" field_map_name="EMP_HIRE_DATE" />
+			<field column_name="PF_S_NAME" field_map_name="EMP_HIRE_DATE" />
 			<query>
 				<statement>
 					SELECT
-					emp_no as EMP_ID,
-					first_name as EMP_NAME,
-					gender as EMP_GENDER,
-					hire_date as EMP_HIRE_DATE
-					FROM
-					employees
+					pmd.id AS DEFAULT_PROCEDURE_ID ,
+					IF(pmd.simple_name
+					is NULL,'', pmd.simple_name) AS PM_NAME ,
+					pf.id AS PF_ID ,
+					pf.name AS
+					PF_NAME,
+					pf.disambiguation_group_name AS PF_GRP_NAME,
+					pf.short_name
+					AS PF_S_NAME
+					FROM procedure_families pf
+					INNER JOIN procedure_mappings
+					AS pmd
+					ON pmd.procedure_family_id = pf.id
+					WHERE pmd.default=1
 				</statement>
 				<max_cached_results> 10000 </max_cached_results>
 			</query>
 		</fieldset>
-		 <fieldset name="key_word" sourceId="ds1"
-			EntityProcessor="com.subsolr.entityprocessors.CSVEntityProcessor">
-			
-			<field column_name="EMP_ID" field_map_name="1" />
-			<field column_name="EMP_NAME" field_map_name="2" />
-			<field column_name="EMP_GENDER" field_map_name="3" />
-			<field column_name="EMP_HIRE_DATE" field_map_name="4" />
-			
-			<fileName></fileName>
-
+		<fieldset name="procedure_mapping" sourceId="ds1"
+			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
+			<field column_name="PMID" field_map_name="PROCE" />
+			<field column_name="AGE_RANGE" field_map_name="EMP_GENDER" />
+			<field column_name="PM_NAME" field_map_name="EMP_HIRE_DATE" />
+			<field column_name="DEFAULT_PROCEDURE_ID" field_map_name="EMP_HIRE_DATE" />
+			<field column_name="PF_ID" field_map_name="EMP_HIRE_DATE" />
+			<field column_name="PF_GRP_NAME" field_map_name="EMP_HIRE_DATE" />
+			<field column_name="PF_NAME" field_map_name="EMP_HIRE_DATE" />
+			<query>
+				<statement>
+					SELECT
+					pm.id AS PM_ID ,
+					IF(pm.age_range is NULL,'',
+					pm.age_range) AS AGE_RANGE ,
+					IF(pm.simple_name is NULL,'',
+					pm.simple_name) AS PM_NAME ,
+					T2.pmd_id AS DEFAULT_PROCEDURE_ID ,
+					T2.pf_id AS PF_ID ,
+					T2.pf_group_name AS PF_GRP_NAME,
+					T2.pf_name AS
+					PF_NAME
+					from
+					(SELECT
+					pmd.id AS pmd_id,
+					pf.id AS pf_id,
+					pf.disambiguation_group_name AS pf_group_name,
+					pf.name AS pf_name
+					FROM procedure_families pf
+					RIGHT JOIN procedure_mappings AS pmd
+					ON
+					pmd.procedure_family_id = pf.id
+					WHERE pmd.default=1) as T2
+					INNER JOIN
+					procedure_mappings pm
+					ON pm.procedure_family_id = T2.pf_id
+					WHERE
+					pm.common=1;
+				</statement>
+				<max_cached_results> 10000 </max_cached_results>
+			</query>
 		</fieldset>
-		<!--
-		<fieldset name="procedure_family">
-			for procedure family info
-		</fieldset> -->
+		<fieldset name="procedure_keyword" sourceId="ds1"
+			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
+			<field column_name="DEFAULT_PROCEDURE_ID" field_map_name="PROCE" />
+			<field column_name="PF_ID" field_map_name="EMP_GENDER" />
+			<field column_name="PF_NAME" field_map_name="EMP_HIRE_DATE" />
+			<field column_name="PF_GRP_NAME" field_map_name="EMP_HIRE_DATE" />
+			<field column_name="KEYWORDS" field_map_name="EMP_HIRE_DATE" />
+			<query>
+				<statement>
+					SELECT
+					pm.id as DEFAULT_PROCEDURE_ID ,
+					pf.id as PF_ID ,
+					pf.name AS PF_NAME,
+					pf.disambiguation_group_name AS PF_GRP_NAME ,
+					T1.keywords as KEYWORDS
+					FROM
+					( SELECT km.keyable_id,
+					GROUP_CONCAT(
+					DISTINCT(kw.text) SEPARATOR ' KEYWORD_SEPARATOR ' ) AS keywords
+					FROM keyword_mappings km
+					INNER JOIN keywords kw
+					ON km.keyword_id =
+					kw.id
+					WHERE km.keyable_type = 'ProcedureFamily'
+					GROUP by
+					km.keyable_id ) as T1
+					INNER JOIN procedure_families pf
+					ON
+					T1.keyable_id = pf.id
+					INNER JOIN procedure_mappings pm
+					ON pf.id =
+					pm.procedure_family_id where pm.default=1;
+				</statement>
+				<max_cached_results> 10000 </max_cached_results>
+			</query>
+		</fieldset>
+		<fieldset-mapping>
+			<map_key source_fieldset="procedure_family" target_fieldset="procedure_mapping">DEFAULT_PROCEDURE_ID
+			</map_key>
+			<map_key source_fieldset="procedure_mapping" target_fieldset="procedure_keyword">
+				DEFAULT_PROCEDURE_ID</map_key>
+		</fieldset-mapping>
 	</document>
 
 </documents>
