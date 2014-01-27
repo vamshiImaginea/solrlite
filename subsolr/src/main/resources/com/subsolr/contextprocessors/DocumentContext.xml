@@ -36,8 +36,8 @@
 					IF(pmd.simple_name is NULL,'', pmd.simple_name) AS PM_NAME ,
 					pf.id AS PF_ID ,
 					pf.name AS PF_NAME,
-					pf.disambiguation_group_name AS PF_GRP_NAME,
-					pf.short_name AS PF_S_NAME
+					IF(pf.disambiguation_group_name is null,"",pf.disambiguation_group_name) AS PF_GRP_NAME,
+					IF(pf.short_name is null,"",pf.short_name) AS PF_S_NAME
 					FROM procedure_families pf
 					INNER JOIN procedure_mappings AS pmd
 					ON pmd.procedure_family_id = pf.id
@@ -62,7 +62,7 @@
 					IF(pm.simple_name is NULL,'', pm.simple_name) AS PM_NAME ,
 					T2.pmd_id AS DEFAULT_PROCEDURE_ID ,
 					T2.pf_id AS PF_ID ,
-					T2.pf_group_name AS PF_GRP_NAME,
+					IF(T2.pf_group_name is NULL,'',T2.pf_group_name) AS PF_GRP_NAME,
 					T2.pf_name AS PF_NAME
 					from
 					(SELECT
@@ -94,7 +94,7 @@
 					pm.id as DEFAULT_PROCEDURE_ID ,
 					pf.id as PF_ID ,
 					pf.name AS PF_NAME,
-					pf.disambiguation_group_name AS PF_GRP_NAME ,
+					IF(pf.disambiguation_group_name is null, "",pf.disambiguation_group_name) AS PF_GRP_NAME ,
 					T1.keywords as KEYWORDS
 					FROM
 					( SELECT km.keyable_id,
@@ -116,9 +116,9 @@
 	    <mapping name="firstjoin">
 	     procedure_family#DEFAULT_PROCEDURE_ID = procedure_mapping#DEFAULT_PROCEDURE_ID
 	   </mapping>
-	   <mapping name="second">
+	  <mapping name="second">
 	     firstjoin#DEFAULT_PROCEDURE_ID = procedure_keyword#DEFAULT_PROCEDURE_ID
-	   </mapping>
+	   </mapping> 
    </mappings>
 
 	</document>
