@@ -50,8 +50,6 @@
 			<artifactId>guava-collections</artifactId>
 			<version>r03</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
