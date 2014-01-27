@@ -1,6 +1,7 @@
 package com.subsolr.contextprocessor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,7 +35,7 @@ public class DocumentContextProcessor implements InitializingBean {
 	private Map<String, DocumentDefinition> documentDefinitionsByName;
 	Map<String, SQLDataSource> sqlDataSourceByName;
 
-	public DocumentContextProcessor(Resource resource,  XPath xPath, DocumentBuilder documentBuilder) {
+	public DocumentContextProcessor(Resource resource, XPath xPath, DocumentBuilder documentBuilder) {
 		this.xPath = xPath;
 		this.documentBuilder = documentBuilder;
 		this.resource = resource;
@@ -51,7 +52,8 @@ public class DocumentContextProcessor implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		Document documentTypeConfigDocument = documentBuilder.parse(resource.getFile());
 		setDataBaseSources(documentTypeConfigDocument.getElementsByTagName("SQLdatasource"));
-		//setFileDataSources(DocumentTypeConfigDocument.getElementsByTagName("Filedatasource"));// TODO
+		// setFileDataSources(DocumentTypeConfigDocument.getElementsByTagName("Filedatasource"));//
+		// TODO
 		setDocumentDefinitions(documentTypeConfigDocument.getElementsByTagName("document"));
 	}
 
@@ -92,19 +94,34 @@ public class DocumentContextProcessor implements InitializingBean {
 			documentDefinition = new DocumentDefinition();
 			documentDefinition.setDocumentName(documentName);
 			documentDefinition.setFieldSets(extractFieldSetDefintions(fieldsetDefinitions));
+			documentDefinition.setMappingRules(extractMappingRules(documentDefinitionNode));
 			documentDefinitionsByName.put(documentName, documentDefinition);
 		}
+
+	}
+
+	private LinkedHashMap<String, String> extractMappingRules(Node documentDefinitionNode) throws XPathExpressionException {
+
+		LinkedHashMap<String, String> mappings = Maps.newLinkedHashMap();
+		NodeList mappingsNodeList = (NodeList) xPath.evaluate("./mappings/mapping", documentDefinitionNode, XPathConstants.NODESET);
+		int noOfMappings = mappingsNodeList.getLength();
+		for (int i = 0; i < noOfMappings; i++) {
+			Node mapping = mappingsNodeList.item(i);
+			mappings.put(getAttributeValueInNode(mapping, "name"), mapping.getTextContent());
+		}
+		return mappings;
 
 	}
 
 	private Map<String, FieldSetDefinition> extractFieldSetDefintions(NodeList fieldsetDefinitionNodeList) throws XPathExpressionException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
 		int noOfFieldSetsInDoc = fieldsetDefinitionNodeList.getLength();
-		Map<String,FieldSetDefinition> fieldSetsByName = Maps.newHashMap();
-		Map<String,String> propertiesForEntityProcessor = Maps.newHashMap();
+		Map<String, FieldSetDefinition> fieldSetsByName = Maps.newHashMap();
+		
 
 		for (int i = 0; i < noOfFieldSetsInDoc; i++) {
 			FieldSetDefinition fieldSetDefinition = new FieldSetDefinition();
+			Map<String, String> propertiesForEntityProcessor = Maps.newHashMap();
 			Node fieldSetNode = fieldsetDefinitionNodeList.item(i);
 			String fieldSetName = getAttributeValueInNode(fieldSetNode, "name");
 			String sourceId = getAttributeValueInNode(fieldSetNode, "sourceId");
@@ -113,19 +130,20 @@ public class DocumentContextProcessor implements InitializingBean {
 			Class<? extends EntityProcessor> entityProcessor = (Class<? extends EntityProcessor>) Class.forName(entityProcessorClass);
 			fieldSetDefinition.setEntityProcessor(entityProcessor.newInstance());
 			Node queryNode = (Node) xPath.evaluate("./query/statement", fieldSetNode, XPathConstants.NODE);
-			Node fileNode =  (Node) xPath.evaluate("./fileName", fieldSetNode, XPathConstants.NODE); 
-			if(null!= queryNode){
-			 propertiesForEntityProcessor.put("SQLQuery", queryNode.getTextContent());
+			Node fileNode = (Node) xPath.evaluate("./fileName", fieldSetNode, XPathConstants.NODE);
+			if (null != queryNode) {
+				propertiesForEntityProcessor.put("SQLQuery", queryNode.getTextContent());
 			}
-			if(null!= fileNode){
-			 propertiesForEntityProcessor.put("File", fileNode.getTextContent());
+			if (null != fileNode) {
+				propertiesForEntityProcessor.put("File", fileNode.getTextContent());
 			}
 			fieldSetDefinition.setPropertiesForEntityProcessor(propertiesForEntityProcessor);
 
 			NodeList fieldMappingNodes = (NodeList) xPath.evaluate("./field", fieldSetNode, XPathConstants.NODESET);
 			Map<String, String> fieldToColumnMapping = extractFieldMappings(fieldMappingNodes);
-		    fieldSetDefinition.setFieldNameToEntityNameMap(fieldToColumnMapping);
-		    fieldSetsByName.put(fieldSetName, fieldSetDefinition);
+			fieldSetDefinition.setFieldNameToEntityNameMap(fieldToColumnMapping);
+			fieldSetDefinition.setName(fieldSetName);
+			fieldSetsByName.put(fieldSetName, fieldSetDefinition);
 		}
 
 		return fieldSetsByName;

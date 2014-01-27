@@ -11,6 +11,7 @@ public class FieldSetDefinition {
 	private DataSource dataSource;
 	private EntityProcessor entityProcessor;
 	private Map<String,String> propertiesForEntityProcessor;
+	private String name;
 
 	public DataSource getDataSource() {
 		return dataSource;
@@ -42,6 +43,14 @@ public class FieldSetDefinition {
 
 	public void setPropertiesForEntityProcessor(Map<String,String> propertiesForEntityProcessor) {
 		this.propertiesForEntityProcessor = propertiesForEntityProcessor;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	
