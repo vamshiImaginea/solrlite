@@ -13,9 +13,9 @@
 			<filter class="porterstem" />
 		</analyzer>
 	</field_type>
- 
+
 	<!-- type for spanish text -->
-	 <field_type name="text_esp" class="org.apache.solr.schema.TextField"
+	<field_type name="text_esp" class="org.apache.solr.schema.TextField"
 		positionIncrementGap="100">
 		<analyzer>
 			<tokenizer
@@ -32,35 +32,34 @@
 	</field_type>
 	<field_type name="txt_en_default" class="org.apache.solr.schema.TextField">
 		<analyzer class="org.apache.lucene.analysis.en.EnglishAnalyzer" />
-	</field_type> 
+	</field_type>
 
-	<field_type name="numericLong" class="org.apache.solr.schema.TrieLongField" precisionStep="8" />
-	<field_type name="date" class="org.apache.solr.schema.TrieDateField" />
-	<field_type name="numericInt" class="org.apache.solr.schema.TrieIntField" precisionStep="8"/>
+	<field_type name="numericLong" class="org.apache.solr.schema.LongField"
+		precisionStep="8" />
+	<field_type name="date" class="org.apache.solr.schema.DateField" />
+	<field_type name="numericInt" class="org.apache.solr.schema.IntField"
+		precisionStep="8" />
 
 	<!-- field definitions here -->
-	<field name="PMN" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false"  />
-	<field name="PMN_s" type="text_esp" indexed="true" stored="true"
-		required="true" multiValued="false" />
-	<field name="PMI " type="numeric" indexed="true" stored="true"
-		required="true" multiValued="false" />
-	<field name="DPMI" type="numeric" indexed="true" stored="true"
-		required="true" multiValued="false" />
-	<field name="AR" type="numeric" indexed="true" stored="true"
-		required="true" multiValued="false" />
-	<field name="PFN" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" />
-	<field name="PFN_s" type="text_esp" indexed="true" stored="true"
-		required="true" multiValued="false" />
+	
 
-	<field name="EMP_ID" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" tokenized="true"/>
-	<field name="EMP_NAME" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" tokenized="true"/>
-	<field name="EMP_GENDER" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" tokenized="true"/>
-	<field name="EMP_HIRE_DATE" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" tokenized="true"/>
+	<field name="DEFAULT_PROCEDURE_ID" type="numericInt" indexed="true"
+		stored="true" required="true" multiValued="false" />
+	<field name="PM_NAME" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PF_ID" type="numericInt" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PF_GRP_NAME" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PF_S_NAME" type="text_en" indexed="true" stored="true"
+		multiValued="false" tokenized="true" default="" />
+	<field name="PF_NAME" type="text_en" indexed="true" stored="true"
+		multiValued="false" tokenized="true" default="" />
+	<field name="PM_ID" type="numericInt" indexed="true" stored="true"
+		required="true" multiValued="false" />
+	<field name="AGE_RANGE" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />	
+<field name="KEYWORDS" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />			
 
 </schema>

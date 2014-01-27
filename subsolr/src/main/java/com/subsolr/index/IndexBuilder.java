@@ -75,7 +75,7 @@ public class IndexBuilder implements InitializingBean {
 			Document doc = new Document();
 			Map<String, String> valueByIndexName = record.getValueByIndexName();
 			for (Entry<String, String> fieldDefEntry : valueByIndexName.entrySet()) {
-
+               if(null !=fieldDefEntry.getValue()){
 				FieldDefinition fieldDefinition = fieldContextProcessor.getFieldDefinitionsByName(fieldDefEntry.getKey());
 				logger.debug("processing fieldDefinition -  " + fieldDefinition.getFieldName());
 				Class<? extends FieldType> fieldTypeClassName = fieldDefinition.getFieldTypeDefinition().getFieldTypeClassName();
@@ -85,11 +85,10 @@ public class IndexBuilder implements InitializingBean {
 					fieldType.setAnalyzer(analyzer.get(0));
 					fieldType.setIsExplicitAnalyzer(true);
 				}
-				//fieldType.setSimilarity(fieldDefinition.getFieldTypeDefinition().getSimilarityClassName());//TODO
-				// Similarity
 				SchemaField schemaField = new SchemaField(fieldDefinition.getFieldName(), fieldType, calcProps(fieldDefinition.getFieldName(), fieldType, fieldDefinition.getFieldProperties()), "");
 				IndexableField field = schemaField.createField(fieldDefEntry.getValue(), 1.0f);
 				doc.add(field);
+               }
 
 			}
 			writer.addDocument(doc);
@@ -216,7 +215,6 @@ public class IndexBuilder implements InitializingBean {
 		Directory index = FSDirectory.open(new File(luceneDirectory + File.separator + documentName));
 		IndexWriterConfig config = new IndexWriterConfig(luceneVersion, analyzer);
 		IndexWriter indexWriter = new IndexWriter(index, config);
-
 		return indexWriter;
 	}
 
