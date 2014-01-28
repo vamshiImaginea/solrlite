@@ -22,11 +22,11 @@ import com.subsolr.entityprocessors.EntityProcessor;
 import com.subsolr.entityprocessors.datasources.SQLDataSource;
 
 /**
- * Reads the Document context and creates the document defnition list.
+ * Reads the Document context and creates the document definition list. and required config for document
  * 
- * @author aditya
- * 
+ * @author vamsiy-mac aditya
  */
+
 public class DocumentContextProcessor implements InitializingBean {
 
 	private final XPath xPath;
@@ -117,7 +117,6 @@ public class DocumentContextProcessor implements InitializingBean {
 			ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
 		int noOfFieldSetsInDoc = fieldsetDefinitionNodeList.getLength();
 		Map<String, FieldSetDefinition> fieldSetsByName = Maps.newHashMap();
-		
 
 		for (int i = 0; i < noOfFieldSetsInDoc; i++) {
 			FieldSetDefinition fieldSetDefinition = new FieldSetDefinition();

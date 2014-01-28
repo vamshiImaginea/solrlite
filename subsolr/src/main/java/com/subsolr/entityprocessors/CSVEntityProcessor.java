@@ -13,6 +13,13 @@ import com.subsolr.contextprocessor.model.FieldSetDefinition;
 import com.subsolr.entityprocessors.datasources.FileDataSource;
 import com.subsolr.entityprocessors.model.Record;
 
+
+/**
+ * Processor  for csv files 
+ * @author vamsiy-mac aditya
+ * 
+ */
+
 public class CSVEntityProcessor implements EntityProcessor {
 
     private static final String CSV_EXTENSION = "csv";

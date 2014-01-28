@@ -23,12 +23,14 @@ import com.subsolr.util.DynamicIndexer;
 import com.subsolr.util.PojoGenerator;
 
 /**
- * Contains the possible lucene document definitions using field name -- source
- * mapping
+ * Pojo for Document definition having fields,fieldsets, feildsetMappings and mapping rules among field sets
  * 
- * @author aditya
+ * @author vamsiy-mac aditya
  * 
  */
+
+
+
 public class DocumentDefinition {
 	private String documentName;
 	private Map<String, FieldSetDefinition> fieldSets;

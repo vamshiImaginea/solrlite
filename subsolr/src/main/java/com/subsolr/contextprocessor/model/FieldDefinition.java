@@ -2,6 +2,13 @@ package com.subsolr.contextprocessor.model;
 
 import java.util.Map;
 
+/**
+ * Pojo for Field definition having fieldsPropeties and FieldType
+ * 
+ * @author vamsiy-mac aditya
+ * 
+ */
+
 public class FieldDefinition {
 
 	String fieldName;

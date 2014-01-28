@@ -28,9 +28,8 @@ import java.util.Map;
 /**
  * Methods to generate attributes dynamically for fields in a POJO, and to create IndexedCollections
  * configured dynamically to index these attributes.
- * <p/>
- * @author ngallagher
- * @since 2013-07-05 12:43
+ * 
+ * @author vamsiy-mac aditya
  */
 public class DynamicIndexer {
 

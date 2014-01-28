@@ -1,5 +1,10 @@
 package com.subsolr.entityprocessors.datasources;
 
+
+/**
+ * POJO for SQL Data sources
+ * @author vamsiy-mac aditya
+ */
 public class SQLDataSource implements DataSource{
 
 	public SQLDataSource(String driver, String url, String userId, String password) {

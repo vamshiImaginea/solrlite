@@ -32,10 +32,10 @@ import com.subsolr.contextprocessor.model.FieldDefinition;
 import com.subsolr.contextprocessor.model.FieldTypeDefinition;
 
 /**
- * Reads the FieldContext and generates the FieldDefinition list and the Domain
+ * Reads the FieldContext and generates the FieldDefinition with list  with analyzers and filters and the Domain
  * Fields list
  * 
- * @author aditya
+ * @author vamsiy-mac aditya
  * 
  */
 public class FieldContextProcessor implements InitializingBean {
@@ -118,7 +118,7 @@ public class FieldContextProcessor implements InitializingBean {
 	}
 
 	private Analyzer getSimpleAnalyzer(String simpleAnalyzerClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
-		return (Analyzer) Class.forName(simpleAnalyzerClass).getConstructor(Version.class).newInstance(Version.LUCENE_CURRENT);
+		return (Analyzer) Class.forName(simpleAnalyzerClass).getConstructor(Version.class).newInstance(Version.valueOf(luceneVersion));
 	}
 
 	private String getPositionIncrementGap(Node fieldTypeDefinitionNode) {
