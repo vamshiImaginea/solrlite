@@ -7,6 +7,11 @@ import org.apache.lucene.search.similarities.Similarity;
 import org.apache.solr.schema.FieldType;
 
 
+/**
+ * Pojo for FieldType definition having field with analyzer and other properties
+ * @author vamsiy-mac aditya
+ * 
+ */
 public class FieldTypeDefinition {
 	public FieldTypeDefinition() {
 	}

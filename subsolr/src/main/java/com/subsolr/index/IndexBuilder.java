@@ -28,6 +28,11 @@ import com.subsolr.contextprocessor.model.DocumentDefinition;
 import com.subsolr.contextprocessor.model.FieldDefinition;
 import com.subsolr.entityprocessors.model.Record;
 
+
+/**
+ * Index Builder for all document definitions defined in documnet config xml
+ * @author vamsiy-mac aditya
+ */
 public class IndexBuilder implements InitializingBean {
 
 	private Version luceneVersion = null;

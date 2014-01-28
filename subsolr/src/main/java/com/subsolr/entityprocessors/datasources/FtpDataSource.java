@@ -1,7 +1,10 @@
 package com.subsolr.entityprocessors.datasources;
 
 import java.io.FileReader;
-
+/**
+ * POJO for FTP Data sources
+ * @author vamsiy-mac aditya
+ */
 public class FtpDataSource extends FileDataSource {
 
     private String host;

@@ -10,7 +10,11 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-
+/**
+ * POJO creator to create runtime class definition based on class name and properties
+ * 
+ * @author vamsiy-mac aditya
+ */
 public class PojoGenerator {
 
 	public static Class generate(String className, Set<String>  properties) throws NotFoundException,
