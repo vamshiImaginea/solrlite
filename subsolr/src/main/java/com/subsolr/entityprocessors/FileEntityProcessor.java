@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.subsolr.contextprocessor.model.FieldSetDefinition;
 import com.subsolr.entityprocessors.model.Record;
+/**
+ * Processor  for Files like XML/JSON files 
+ * @author vamsiy-mac aditya
+ * 
+ */
 
 public class FileEntityProcessor implements EntityProcessor {
 	
