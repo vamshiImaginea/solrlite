@@ -33,7 +33,7 @@ public class DocumentDefinition {
 	private String documentName;
 	private Map<String, FieldSetDefinition> fieldSets;
 	LinkedHashMap<String, String> mappingRules;
-	Map<String,Set<String>> attributes = Maps.newHashMap(); // for joins
+	Map<String, Set<String>> attributes = Maps.newHashMap(); // for joins
 
 	public String getDocumentName() {
 		return documentName;
@@ -69,23 +69,21 @@ public class DocumentDefinition {
 		for (Map.Entry<String, String> mappingRuleEntry : mappingRules.entrySet()) {
 			records = Lists.newArrayList();
 			String mappingRule = mappingRuleEntry.getValue();
-			attributes.put(mappingRuleEntry.getKey(), Sets.<String>newHashSet());
+			attributes.put(mappingRuleEntry.getKey(), Sets.<String> newHashSet());
 			final String[] fieldSetConditions = mappingRule.split("=");
-			
 
 			Class fieldsetDataClassLeft = generateClassFile(fieldSetConditions[0].split("#")[0].trim());
 			Class fieldsetDataClassRight = generateClassFile(fieldSetConditions[1].split("#")[0].trim());
-			
+
 			List<Record> recordsOfLeftOp = getRecords(recordsByFieldSet, fieldSetConditions[0].split("#")[0].trim());
 			List fieldsetDataLeft = populateData(fieldsetDataClassLeft, recordsOfLeftOp);
 			List<Record> recordsOfRightOp = getRecords(recordsByFieldSet, fieldSetConditions[1].split("#")[0].trim());
 			List fieldsetDataRight = populateData(fieldsetDataClassRight, recordsOfRightOp);
 
-
 			Map fieldsetDataAtributesLeft = DynamicIndexer.generateAttributesForPojo(fieldsetDataClassLeft);
 			Map fieldsetDataAtributesRight = DynamicIndexer.generateAttributesForPojo(fieldsetDataClassRight);
 			IndexedCollection autoIndexedCollectionLeft = DynamicIndexer.newAutoIndexedCollection(fieldsetDataAtributesLeft.values());
-			
+
 			autoIndexedCollectionLeft.addAll(fieldsetDataLeft);
 
 			IndexedCollection autoIndexedCollectionRight = DynamicIndexer.newAutoIndexedCollection(fieldsetDataAtributesRight.values());
@@ -107,10 +105,15 @@ public class DocumentDefinition {
 			for (Record record : recordsOfLeftOp) {
 				String attributeValue = record.getValueByIndexName().get(fieldSetConditions[1].split("#")[1].trim());
 				ResultSet resultSet = autoIndexedCollectionRight.retrieve(contains(simpleAttribute, attributeValue));
-				Iterator iterator = resultSet.iterator();
-				while (iterator.hasNext()) {
-					Object next = iterator.next();
-					createCombinedRecord(records, record, next, fieldSetConditions[1].split("#")[0].trim(),mappingRuleEntry.getKey());
+
+				if (resultSet.isNotEmpty()) {
+					Iterator iterator = resultSet.iterator();
+					while (iterator.hasNext()) {
+						Object next = iterator.next();
+						createCombinedRecord(records, record, next, fieldSetConditions[1].split("#")[0].trim(), mappingRuleEntry.getKey());
+					}
+				} else {
+					records.add(record);
 				}
 			}
 
@@ -122,14 +125,14 @@ public class DocumentDefinition {
 	}
 
 	private List<Record> getRecords(Map<String, List<Record>> recordsByFieldSet, final String fieldSetCondition) {
-		FieldSetDefinition fieldSetDefinition= fieldSets.get(fieldSetCondition);
+		FieldSetDefinition fieldSetDefinition = fieldSets.get(fieldSetCondition);
 		List<Record> records = null;
-		if(null != fieldSetDefinition){
-		 records = recordsByFieldSet.get(fieldSetDefinition.getName());
-		}else{
-			records = 	recordsByFieldSet.get(fieldSetCondition);
+		if (null != fieldSetDefinition) {
+			records = recordsByFieldSet.get(fieldSetDefinition.getName());
+		} else {
+			records = recordsByFieldSet.get(fieldSetCondition);
 		}
-		
+
 		return records;
 	}
 
@@ -141,7 +144,7 @@ public class DocumentDefinition {
 		if (null != fieldSetDefinition) {
 			className = fieldSetDefinition.getName();
 			attributeSet = fieldSetDefinition.getFieldNameToEntityNameMap().keySet();
-		}else{
+		} else {
 			className = fieldSetName;
 			attributeSet = attributes.get(fieldSetName);
 		}
@@ -149,7 +152,7 @@ public class DocumentDefinition {
 		return PojoGenerator.generate(className, attributeSet);
 	}
 
-	private void createCombinedRecord(List<Record> records, Record record, Object next, String string,String mappingName) {
+	private void createCombinedRecord(List<Record> records, Record record, Object next, String string, String mappingName) {
 
 		Map<String, String> map = Maps.newHashMap();
 		map.putAll(record.getValueByIndexName());
