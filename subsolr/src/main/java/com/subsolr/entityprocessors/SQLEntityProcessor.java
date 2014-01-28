@@ -32,6 +32,8 @@ public class SQLEntityProcessor implements EntityProcessor {
 				Map<String, String> valueByIndexName = Maps.newHashMap();
 				for (String fieldName : fieldNameToEntityNameMap.keySet()) {
 					String fieldValue = rs.getString(fieldNameToEntityNameMap.get(fieldName));
+					if(fieldValue == null)
+						fieldValue = " ";
 					valueByIndexName.put(fieldName, fieldValue);
 				}
 				records.add(new Record(valueByIndexName));

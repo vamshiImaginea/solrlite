@@ -41,7 +41,7 @@
 		precisionStep="8" />
 
 	<!-- field definitions here -->
-	
+
 
 	<field name="DEFAULT_PROCEDURE_ID" type="numericInt" indexed="true"
 		stored="true" required="true" multiValued="false" />
@@ -58,8 +58,26 @@
 	<field name="PM_ID" type="numericInt" indexed="true" stored="true"
 		required="true" multiValued="false" />
 	<field name="AGE_RANGE" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" tokenized="true" />	
-<field name="KEYWORDS" type="text_en" indexed="true" stored="true"
-		required="true" multiValued="false" tokenized="true" />			
+		required="true" multiValued="false" tokenized="true" />
+	<field name="KEYWORDS" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+
+	<field name="PROVIDER_ID" type="numericInt" indexed="true"
+		stored="true" required="true" multiValued="false" tokenized="true" />
+	
+	<field name="PROVIDER_NAME" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PROVIDER_LAST_NAME" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PROVIDER_INITIALS" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PROVIDER_FIRST_NAME" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PROVIDER_IS_FACILITY" type="text_en" indexed="false" stored="true"
+		required="true" multiValued="false" tokenized="true" />
+	<field name="PROVIDER_NETWORKS"  type="numericInt" indexed="true" stored="true"
+		required="true" multiValued="true" tokenized="true" />
+	<field name="LAT_LONG" type="numericInt" indexed="true" stored="true"
+		required="true" multiValued="true" tokenized="true" />
 
 </schema>
