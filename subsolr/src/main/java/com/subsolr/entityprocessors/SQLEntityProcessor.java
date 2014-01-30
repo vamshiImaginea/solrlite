@@ -32,9 +32,9 @@ public class SQLEntityProcessor implements EntityProcessor {
 		final List<Record> records = Lists.newArrayList();
 		final Map<String, String> fieldNameToEntityNameMap = fieldSetDefinition.getFieldNameToEntityNameMap();
 		JdbcTemplate jdbcTemplate = getJdbcTempate(sqlDataSource);
+		logger.info("processing data in FieldSetDef :"+fieldSetDefinition.getName());
 		jdbcTemplate.query(fieldSetDefinition.getPropertiesForEntityProcessor().get("SQLQuery"), new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
-				logger.debug("columns received"+rs.getMetaData());
 				Map<String, String> valueByIndexName = Maps.newHashMap();
 				for (String fieldName : fieldNameToEntityNameMap.keySet()) {
 					String fieldValue = rs.getString(fieldNameToEntityNameMap.get(fieldName));

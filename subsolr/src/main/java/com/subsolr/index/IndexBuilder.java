@@ -101,8 +101,8 @@ public class IndexBuilder implements InitializingBean {
 			logger.debug("processing done for  documentName -  " + documentName);
 
 		}
-		writer.close();
 
+		writer.close();
 	}
 
 	static int parseProperties(Map<String, ?> properties, boolean which, boolean failOnError) {
@@ -132,7 +132,7 @@ public class IndexBuilder implements InitializingBean {
 		}
 	}
 
-	static int calcProps(String name, FieldType ft, Map<String, ?> props) {
+	public static int calcProps(String name, FieldType ft, Map<String, ?> props) {
 		int trueProps = parseProperties(props, true, true);
 		int falseProps = parseProperties(props, false, true);
 
@@ -231,8 +231,9 @@ public class IndexBuilder implements InitializingBean {
 		for (Entry<String, DocumentDefinition> documentEntryDefinition : documentDefinitions.entrySet()) {
 			String doucmentName = documentEntryDefinition.getKey();
 			DocumentDefinition documentDefinition = documentEntryDefinition.getValue();
-			List<Record> recordsToBeIndexed = documentDefinition.getRecordsToBeIndexed();
-			indexRecordsForDocument(recordsToBeIndexed, doucmentName);
+			IndexWriter writer = getIndexWriterForDocument(false, doucmentName);
+			documentDefinition.indexRecordsForDoc(writer);
+			writer.close();
 
 		}
 

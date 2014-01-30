@@ -78,6 +78,8 @@
 	<field name="PROVIDER_NETWORKS"  type="numericInt" indexed="true" stored="true"
 		required="true" multiValued="true" tokenized="true" />
 	<field name="LAT_LONG" type="numericInt" indexed="true" stored="true"
-		required="true" multiValued="true" tokenized="true" />
+		required="true" multiValued="true" tokenized="false" />
+	<field name="PRACTICE_NAME" type="text_en" indexed="true" stored="true"
+		required="true" multiValued="false" tokenized="true" />	
 
 </schema>

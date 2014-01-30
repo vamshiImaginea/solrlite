@@ -34,11 +34,13 @@ public class DocumentContextProcessor implements InitializingBean {
 	private final Resource resource;
 	private Map<String, DocumentDefinition> documentDefinitionsByName;
 	Map<String, SQLDataSource> sqlDataSourceByName;
+	private final FieldContextProcessor fieldContextProcessor;
 
-	public DocumentContextProcessor(Resource resource, XPath xPath, DocumentBuilder documentBuilder) {
+	public DocumentContextProcessor(Resource resource, XPath xPath, DocumentBuilder documentBuilder,FieldContextProcessor fieldContextProcessor) {
 		this.xPath = xPath;
 		this.documentBuilder = documentBuilder;
 		this.resource = resource;
+		this.fieldContextProcessor =fieldContextProcessor;
 	}
 
 	public Map<String, DocumentDefinition> getDocumentDefinitions() {
@@ -91,10 +93,7 @@ public class DocumentContextProcessor implements InitializingBean {
 			Node documentDefinitionNode = documentDefinitionNodeList.item(i);
 			String documentName = getAttributeValueInNode(documentDefinitionNode, "name");
 			NodeList fieldsetDefinitions = (NodeList) xPath.evaluate("./fieldset", documentDefinitionNode, XPathConstants.NODESET);
-			documentDefinition = new DocumentDefinition();
-			documentDefinition.setDocumentName(documentName);
-			documentDefinition.setFieldSets(extractFieldSetDefintions(fieldsetDefinitions));
-			documentDefinition.setMappingRules(extractMappingRules(documentDefinitionNode));
+			documentDefinition = new DocumentDefinition(documentName,extractFieldSetDefintions(fieldsetDefinitions),extractMappingRules(documentDefinitionNode),fieldContextProcessor);
 			documentDefinitionsByName.put(documentName, documentDefinition);
 		}
 

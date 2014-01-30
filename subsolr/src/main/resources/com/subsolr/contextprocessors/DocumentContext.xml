@@ -20,7 +20,7 @@
 
 
 	<!-- configure documents here -->
-	<!-- <document name="ProcedureDocument">
+	 <document name="ProcedureDocument">
 
 		<fieldset name="procedure_family" sourceId="ds1"
 			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
@@ -141,10 +141,9 @@
 			</mapping>
 		</mappings>
 
-	</document> -->
-	<document name="ProviderDocument">
-		<fieldset name="provider_name" sourceId="ds1"
-			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
+	</document> 
+	<!--  <document name="ProviderDocument">
+ 		 <fieldset name="provider_name" sourceId="ds1" EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor" batchSize="5000">
 			<field column_name="PROVIDER_ID" field_map_name="PROVIDER_ID" />
 			<field column_name="PROVIDER_NAME" field_map_name="PROVIDER_NAME" />
 			<field column_name="PROVIDER_LAST_NAME" field_map_name="PROVIDER_LAST_NAME" />
@@ -175,7 +174,7 @@
 					p.id;
 				</statement>
 			</query>
-		</fieldset>
+		</fieldset> 
 		<fieldset name="practice_name" sourceId="ds1"
 			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
 			<field column_name="PRACTICE_NAME" field_map_name="PRACTICE_NAME" />
@@ -213,8 +212,8 @@
 					pr.id;
 				</statement>
 			</query>
-		</fieldset>
-		<fieldset name="provider_network" sourceId="ds1"
+		</fieldset> 
+ 		 <fieldset name="provider_network" sourceId="ds1"
 			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
 			<field column_name="PROVIDER_ID" field_map_name="PROVIDER_ID" />
 			<field column_name="PROVIDER_NETWORKS" field_map_name="PROVIDER_NETWORKS" />
@@ -238,22 +237,11 @@
 					'emergency room service';
 				</statement>
 			</query>
-		</fieldset>
-		<mappings>
-			<mapping name="firstjoin">
-				provider_name#PROVIDER_ID =
-				practice_name#PROVIDER_ID
-			</mapping>
-			<mapping name="second">
-				firstjoin#PROVIDER_ID =
-				provider_network#PROVIDER_ID
-			</mapping>
-		</mappings>
-		<!-- <fieldset name="network_plan" sourceId="ds1"
+		</fieldset> 
+	    <fieldset name="network_plan" sourceId="ds1"
 			EntityProcessor="com.subsolr.entityprocessors.SQLEntityProcessor">
 			<field column_name="PROVIDER_PLANS" field_map_name="PROVIDER_PLANS" />
 			<field column_name="PROVIDER_NETWORKS" field_map_name="PROVIDER_NETWORKS" />
-			
 			<query>
 				<statement>
 					SELECT
@@ -264,11 +252,24 @@
 					ON FIND_IN_SET(ipnm.external_plan_network_mapping_code,
 					ip.external_plan_network_mapping_code)
 					GROUP BY ipnm.provider_network_id;
-
 				</statement>
 			</query>
-		</fieldset> -->
-		
-		
-	</document>
+		</fieldset> 
+		<mappings>
+			
+			<mapping name="third">
+				network_plan#PROVIDER_NETWORKS =
+				practice_name#PROVIDER_NETWORKS
+			</mapping>
+			 <mapping name="firstjoin">
+				practice_name#PROVIDER_ID=third#PROVIDER_ID
+			</mapping>
+			<mapping name="second">
+				provider_name#PROVIDER_ID =
+				firstjoin#PROVIDER_ID
+			</mapping> 
+			
+		</mappings>
+	
+	</document> -->
 </documents>
